@@ -3,18 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoryFragment">
+    tools:context=".CatalogFragment">
 
     <TextView
-        android:id="@+id/navCategory"
+        android:id="@+id/navCatalog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:background="#8304"
+        android:background="#F293"
         android:textColor="#fff"
-        android:text="Category Fragment"
+        android:text="Catalog Fragment"
     />
 
 </FrameLayout>

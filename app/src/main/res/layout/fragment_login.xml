@@ -3,18 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoryFragment">
+    tools:context=".LoginFragment">
 
     <TextView
-        android:id="@+id/navCategory"
+        android:id="@+id/navLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:background="#8304"
+        android:background="#F2939203"
         android:textColor="#fff"
-        android:text="Category Fragment"
+        android:text="Login Fragment"
     />
 
 </FrameLayout>
