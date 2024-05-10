@@ -2,7 +2,9 @@ package br.com.cairu.projeto.integrador.brecho;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
     public FrameLayout frameLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new HomeFragment(), true);
     }
 
-    private void loadFragment(Fragment fragment, boolean isAppInitialized) {
+    public void loadFragment(Fragment fragment, boolean isAppInitialized) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
