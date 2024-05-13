@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho;
+package br.com.cairu.projeto.integrador.brecho.fragment;
 
 import android.os.Bundle;
 
@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.com.cairu.projeto.integrador.brecho.R;
 
-public class CategoryFragment extends Fragment {
-
+public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        return inflater.inflate(R.layout.fragment_user, container, false);
     }
 }

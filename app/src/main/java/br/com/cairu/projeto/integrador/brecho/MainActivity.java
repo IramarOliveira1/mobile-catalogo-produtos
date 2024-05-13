@@ -2,9 +2,7 @@ package br.com.cairu.projeto.integrador.brecho;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,6 +13,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import br.com.cairu.projeto.integrador.brecho.fragment.CatalogFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.CategoryFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.HomeFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.ProductFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity {
 

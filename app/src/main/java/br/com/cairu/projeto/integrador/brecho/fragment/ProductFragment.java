@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho;
+package br.com.cairu.projeto.integrador.brecho.fragment;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import br.com.cairu.projeto.integrador.brecho.R;
 
 public class ProductFragment extends Fragment {
     @Override
