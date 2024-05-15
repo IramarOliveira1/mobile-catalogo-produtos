@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho;
+package br.com.cairu.projeto.integrador.brecho.fragment;
 
 import android.os.Bundle;
 
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import br.com.cairu.projeto.integrador.brecho.R;
 
 public class CatalogFragment extends Fragment {
     public CatalogFragment() {

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp">
+
+    <ImageView
+        android:id="@+id/imageProductHome"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_img_product_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/nameProductHome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="#000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageProductHome"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Camisa Vintage Estampada" />
+
+    <TextView
+        android:id="@+id/countClickView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FF795A"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/nameProductHome"
+        app:layout_constraintStart_toStartOf="@+id/nameProductHome"
+        tools:text="130 clicks" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

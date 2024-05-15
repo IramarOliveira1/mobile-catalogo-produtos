@@ -40,4 +40,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    //picasso
+    implementation(libs.picasso)
+
+    //okhttp
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.logging.interceptor)
 }
