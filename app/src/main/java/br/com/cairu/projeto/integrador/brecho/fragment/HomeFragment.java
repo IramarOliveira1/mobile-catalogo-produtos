@@ -1,5 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,15 +111,15 @@ public class HomeFragment extends Fragment {
                 recycleView.setAdapter(homeAdapter);
 
                 TextView totalProduct = view.findViewById(R.id.quantityProduct);
-                totalProduct.setText(Long.toString(homeResponseDTO.get(0).getTotalProduct()));
+                totalProduct.setText(homeResponseDTO.isEmpty()  ? "0" :  Long.toString(homeResponseDTO.get(0).getTotalProduct()));
 
                 TextView totalCategory = view.findViewById(R.id.quantityCategory);
-                totalCategory.setText(Long.toString(homeResponseDTO.get(0).getTotalCategory()));
+                totalCategory.setText(homeResponseDTO.isEmpty()  ? "0" :  Long.toString(homeResponseDTO.get(0).getTotalCategory()));
             }
 
             @Override
             public void onFailure(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Throwable throwable) {
-                System.out.println(throwable.getMessage());
+                Log.e("HomeFragment", "Erro ao carregar dados da API", throwable);
             }
         });
     }
