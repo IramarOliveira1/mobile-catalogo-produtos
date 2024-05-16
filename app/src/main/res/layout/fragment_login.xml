@@ -75,12 +75,13 @@
             android:padding="16dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:background="@drawable/bg_btn_login"
-            android:text="CONTINUAR" />
+            android:text="CONTINUAR"
+        />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

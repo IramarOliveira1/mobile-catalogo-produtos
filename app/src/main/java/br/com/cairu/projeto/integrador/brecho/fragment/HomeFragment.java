@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,6 +25,7 @@ import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.databinding.ActivityMainBinding;
 import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.LoginResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.services.HomeService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,9 +43,11 @@ public class HomeFragment extends Fragment {
 
     public HomeAdapter homeAdapter;
 
-    public HomeFragment() {
+    public String name;
 
+    public HomeFragment() {
     }
+
 
     public void changeScreenProduct(View view) {
         buttonTextView = view.findViewById(R.id.homeViewAllProduct);
@@ -54,7 +58,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.frameLayout, new ProductFragment())
+                        .replace(R.id.frameLayout, new ProductFragment())
                         .addToBackStack(null)
                         .commit();
 
@@ -73,7 +77,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.frameLayout, new CategoryFragment())
+                        .replace(R.id.frameLayout, new CategoryFragment())
                         .addToBackStack(null)
                         .commit();
 
@@ -111,15 +115,15 @@ public class HomeFragment extends Fragment {
                 recycleView.setAdapter(homeAdapter);
 
                 TextView totalProduct = view.findViewById(R.id.quantityProduct);
-                totalProduct.setText(homeResponseDTO.isEmpty()  ? "0" :  Long.toString(homeResponseDTO.get(0).getTotalProduct()));
+                totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
 
                 TextView totalCategory = view.findViewById(R.id.quantityCategory);
-                totalCategory.setText(homeResponseDTO.isEmpty()  ? "0" :  Long.toString(homeResponseDTO.get(0).getTotalCategory()));
+                totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
             }
 
             @Override
             public void onFailure(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Throwable throwable) {
-                Log.e("HomeFragment", "Erro ao carregar dados da API", throwable);
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });
     }
