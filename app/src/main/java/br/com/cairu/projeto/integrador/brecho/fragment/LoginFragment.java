@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import br.com.cairu.projeto.integrador.brecho.MainActivity;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.ErrorResponse;
@@ -63,6 +65,7 @@ public class LoginFragment extends Fragment {
         password = view.findViewById(R.id.editPassword);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         progressBar = view.findViewById(R.id.progressBar);
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,13 +100,16 @@ public class LoginFragment extends Fragment {
                     generic.saveToken(loginResponseDTO.getToken());
                     generic.saveUsername(loginResponseDTO.getName());
 
-                    if (!loginResponseDTO.isAdmin()) {
-                        Menu menu = bottomNavigationView.getMenu();
-                        menu.removeItem(R.id.user);
+                    Menu menu = bottomNavigationView.getMenu();
+                    MenuItem menuItem = menu.findItem(R.id.user);
+
+                    if (loginResponseDTO.isAdmin()) {
+                        menuItem.setVisible(true);
+                    } else {
+                        menuItem.setVisible(false);
                     }
 
                     changeFrament();
-
                 } else {
                     try {
                         ErrorResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);

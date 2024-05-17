@@ -4,13 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.ArrayList;
+
+import br.com.cairu.projeto.integrador.brecho.R;
+import br.com.cairu.projeto.integrador.brecho.fragment.HomeFragment;
 
 public class Generic {
 
     private SharedPreferences sharedPreferences;
     private static final String TOKEN_KEY = "jwt_token";
     private static final String USERNAME_KEY = "userName";
+    private Context context;
 
     public Generic(Context context) {
         sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
@@ -51,7 +59,6 @@ public class Generic {
                 validate = true;
             }
         }
-
         return validate;
     }
 }

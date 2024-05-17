@@ -1,6 +1,8 @@
 package br.com.cairu.projeto.integrador.brecho.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,16 +25,21 @@ import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.services.HomeService;
+import br.com.cairu.projeto.integrador.brecho.utils.Dialog;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements Dialog {
 
     private BottomNavigationView bottomNavigationView;
 
     private TextView buttonTextView;
+
+    private TextView logout;
+
+    private Generic generic;
 
     private RecyclerView recycleView;
 
@@ -85,6 +92,14 @@ public class HomeFragment extends Fragment {
         this.changeScreenProduct(view);
         this.changeScreenCategory(view);
         this.all(view);
+
+        logout = view.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
     }
 
     @Override
@@ -93,7 +108,8 @@ public class HomeFragment extends Fragment {
     }
 
     public void all(View view) {
-        Generic generic = new Generic(getActivity());
+        generic = new Generic(getActivity());
+
         TextView username = view.findViewById(R.id.userHome);
         username.setText("OLÁ, " + generic.getUsername().toUpperCase());
 
@@ -123,5 +139,38 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void logout() {
+        this.showDialog(
+                "Você deseja realmente sair ?",
+                "Sair",
+                "Cancelar"
+        );
+    }
+
+    @Override
+    public void showDialog(String message, String positiveButton, String negativeButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message);
+        builder.setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                generic.clear();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout, new LoginFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+        builder.setNegativeButton(negativeButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
