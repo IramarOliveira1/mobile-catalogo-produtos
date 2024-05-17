@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new CatalogFragment(), false);
                 } else {
                     loadFragment(new UserFragment(), false);
-
                 }
+
                 return true;
             }
         });

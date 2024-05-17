@@ -1,7 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,27 +21,22 @@ import java.util.List;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.databinding.ActivityMainBinding;
 import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.LoginResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.services.HomeService;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment {
 
-    public BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
-    public TextView buttonTextView;
+    private TextView buttonTextView;
 
-    public RecyclerView recycleView;
+    private RecyclerView recycleView;
 
-    public HomeAdapter homeAdapter;
-
-    public String name;
+    private HomeAdapter homeAdapter;
 
     public HomeFragment() {
     }
@@ -100,6 +93,10 @@ public class HomeFragment extends Fragment {
     }
 
     public void all(View view) {
+        Generic generic = new Generic(getActivity());
+        TextView username = view.findViewById(R.id.userHome);
+        username.setText("OLÁ, " + generic.getUsername().toUpperCase());
+
         HomeService homeService = new ApiClient().getClient().create(HomeService.class);
 
         Call<List<HomeResponseDTO>> call = homeService.homeResponseDto();

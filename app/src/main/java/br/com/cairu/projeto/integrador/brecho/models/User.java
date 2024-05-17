@@ -10,7 +10,7 @@ public class User {
 
     private String cpf;
 
-    private  String password;
+    private String password;
 
     private boolean isAdmin;
 
