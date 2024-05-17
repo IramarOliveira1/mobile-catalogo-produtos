@@ -13,7 +13,7 @@ public class Generic {
     private static final String USERNAME_KEY = "userName";
 
     public Generic(Context context) {
-       sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
     }
 
     public void saveToken(String token) {
@@ -42,15 +42,16 @@ public class Generic {
         return sharedPreferences.getString(USERNAME_KEY, null);
     }
 
-    public boolean empty(ArrayList<EditText> editTexts){
-        boolean teste = false;
+    public boolean empty(ArrayList<EditText> editTexts) {
+        boolean validate = false;
 
-        editTexts.forEach((n) -> {
-            if (n.getText().toString().trim().isEmpty()){
-                n.setError("PREENCHA TODOS OS CAMPOS!");
+        for (EditText editText : editTexts) {
+            if (editText.getText().toString().trim().isEmpty()) {
+                editText.setError("Preencha este campo.");
+                validate = true;
             }
-        });
+        }
 
-        return  teste;
+        return validate;
     }
 }

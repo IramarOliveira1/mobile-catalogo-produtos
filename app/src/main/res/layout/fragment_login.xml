@@ -26,6 +26,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -34,6 +35,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/bg_progress_bar"
+            android:progress="0" />
+
 
         <TextView
             android:id="@+id/emailLogin"
@@ -46,7 +58,6 @@
 
         <EditText
             android:id="@+id/editEmail"
-            android:text="testando@teste.com"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -54,7 +65,8 @@
             android:background="@drawable/bg_edit_login"
             android:hint="email@email.com"
             android:inputType="textEmailAddress"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:text="testando@teste.com" />
 
         <TextView
             android:id="@+id/passwordLogin"
@@ -73,7 +85,8 @@
             android:background="@drawable/bg_edit_login"
             android:hint="*************"
             android:inputType="textPassword"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:text="123456" />
 
         <Button
             android:id="@+id/buttonLogin"
@@ -81,8 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:background="@drawable/bg_btn_login"
-            android:text="CONTINUAR"
-        />
+            android:text="CONTINUAR" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
