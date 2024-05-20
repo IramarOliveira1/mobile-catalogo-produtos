@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.ErrorResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.LoginRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.LoginResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.services.LoginService;
@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment {
                     changeFrament();
                 } else {
                     try {
-                        ErrorResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
                         Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

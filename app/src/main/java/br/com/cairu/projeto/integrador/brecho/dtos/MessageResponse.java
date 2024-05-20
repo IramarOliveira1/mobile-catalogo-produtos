@@ -1,6 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.dtos;
 
-public class ErrorResponse {
+public class MessageResponse {
     private String message;
 
     public String getMessage() {

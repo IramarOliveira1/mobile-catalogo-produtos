@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class CategoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.all(view);
+        this.createOrUpdate(view);
     }
 
     public void all(View view) {
@@ -68,4 +70,20 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
+
+    public void createOrUpdate(View view) {
+
+        Button buttonTextView = view.findViewById(R.id.createCategory);
+
+        buttonTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout, new CreateOrUpdateFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+    }
+
 }

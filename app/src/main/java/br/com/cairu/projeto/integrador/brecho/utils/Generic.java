@@ -4,7 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.ArrayList;
+
+import br.com.cairu.projeto.integrador.brecho.R;
+
 public class Generic {
 
     private SharedPreferences sharedPreferences;

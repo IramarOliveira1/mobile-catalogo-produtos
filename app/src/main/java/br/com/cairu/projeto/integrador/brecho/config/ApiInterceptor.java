@@ -23,13 +23,15 @@ public class ApiInterceptor implements Interceptor {
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-
-//        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        String token = new Generic(context).getToken();
 
         Request originalRequest = chain.request();
         Request.Builder builder = originalRequest.newBuilder()
-                .header("Authorization", new Generic(context).getToken())
                 .header("Content-Type", "application/json");
+
+        if (token != null) {
+            builder.header("Authorization", token);
+        }
 
         Request newRequest = builder.build();
         return chain.proceed(newRequest);
