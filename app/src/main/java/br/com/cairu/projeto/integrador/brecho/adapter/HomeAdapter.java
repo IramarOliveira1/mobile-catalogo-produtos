@@ -1,8 +1,5 @@
 package br.com.cairu.projeto.integrador.brecho.adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
@@ -52,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_recicle_view_home, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.items_recyclerview_home, parent, false);
 
         return new ViewHolder(view);
     }

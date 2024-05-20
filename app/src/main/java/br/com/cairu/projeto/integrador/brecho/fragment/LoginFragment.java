@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import br.com.cairu.projeto.integrador.brecho.MainActivity;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.ErrorResponse;
@@ -88,7 +87,7 @@ public class LoginFragment extends Fragment {
     public void login(String email, String password) {
         LoginRequestDTO loginRequest = new LoginRequestDTO(email, password);
 
-        LoginService loginService = new ApiClient().getClient().create(LoginService.class);
+        LoginService loginService = new ApiClient().getClient(getActivity()).create(LoginService.class);
 
         Call<LoginResponseDTO> call = loginService.login(loginRequest);
         call.enqueue(new Callback<LoginResponseDTO>() {

@@ -1,6 +1,5 @@
 package br.com.cairu.projeto.integrador.brecho.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -41,13 +40,12 @@ public class HomeFragment extends Fragment implements Dialog {
 
     private Generic generic;
 
-    private RecyclerView recycleView;
+    private RecyclerView recyclerView;
 
     private HomeAdapter homeAdapter;
 
     public HomeFragment() {
     }
-
 
     public void changeScreenProduct(View view) {
         buttonTextView = view.findViewById(R.id.homeViewAllProduct);
@@ -113,11 +111,11 @@ public class HomeFragment extends Fragment implements Dialog {
         TextView username = view.findViewById(R.id.userHome);
         username.setText("OLÁ, " + generic.getUsername().toUpperCase());
 
-        HomeService homeService = new ApiClient().getClient().create(HomeService.class);
+        HomeService homeService = new ApiClient().getClient(getActivity()).create(HomeService.class);
 
-        Call<List<HomeResponseDTO>> call = homeService.homeResponseDto();
+        Call<List<HomeResponseDTO>> call = homeService.homeResponseDTO();
 
-        recycleView = view.findViewById(R.id.recycleView);
+        recyclerView = view.findViewById(R.id.recycleViewHome);
         call.enqueue(new Callback<List<HomeResponseDTO>>() {
             @Override
             public void onResponse(Call<List<HomeResponseDTO>> call, Response<List<HomeResponseDTO>> response) {
@@ -125,7 +123,7 @@ public class HomeFragment extends Fragment implements Dialog {
 
                 homeAdapter = new HomeAdapter(homeResponseDTO);
 
-                recycleView.setAdapter(homeAdapter);
+                recyclerView.setAdapter(homeAdapter);
 
                 TextView totalProduct = view.findViewById(R.id.quantityProduct);
                 totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));

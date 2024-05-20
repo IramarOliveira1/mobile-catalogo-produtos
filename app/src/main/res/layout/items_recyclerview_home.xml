@@ -10,9 +10,9 @@
         android:id="@+id/imageProductHome"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_img_product_home"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
         android:id="@+id/nameProductHome"

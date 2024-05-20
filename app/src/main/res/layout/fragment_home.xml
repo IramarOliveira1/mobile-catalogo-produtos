@@ -122,7 +122,6 @@
             app:layout_constraintStart_toEndOf="@+id/quantityCategory"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <TextView
             android:id="@+id/homeNameCategory"
             android:layout_width="wrap_content"
@@ -166,7 +165,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleView"
+            android:id="@+id/recycleViewHome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
@@ -174,9 +173,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:listitem="@layout/items_recicle_view_home" />
+            tools:listitem="@layout/items_recyclerview_home" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>
