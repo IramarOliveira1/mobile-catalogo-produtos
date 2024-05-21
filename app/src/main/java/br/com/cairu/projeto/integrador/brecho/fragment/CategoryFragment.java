@@ -12,14 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.CategoryAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,10 +83,39 @@ public class CategoryFragment extends Fragment {
         buttonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, new CreateOrUpdateFragment())
-                        .addToBackStack(null)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CreateOrUpdateFragment()).addToBackStack(null).commit();
+            }
+        });
+    }
+
+    public void delete(Long id) {
+        CategoryService categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
+
+        Call<MessageResponse> call = categoryService.delete(id);
+
+        call.enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                if (response.isSuccessful()) {
+                    MessageResponse errorResponse = response.body();
+
+                    Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    try {
+                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });
     }

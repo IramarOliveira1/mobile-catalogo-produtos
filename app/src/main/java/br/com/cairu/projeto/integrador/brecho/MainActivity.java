@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             fragmentTransaction.replace(R.id.frameLayout, fragment);
         }
+
         fragmentTransaction.commit();
     }
 }

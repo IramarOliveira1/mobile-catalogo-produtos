@@ -26,11 +26,11 @@ public class ApiInterceptor implements Interceptor {
         String token = new Generic(context).getToken();
 
         Request originalRequest = chain.request();
-        Request.Builder builder = originalRequest.newBuilder()
-                .header("Content-Type", "application/json");
+        Request.Builder builder = originalRequest.newBuilder();
 
         if (token != null) {
             builder.header("Authorization", token);
+            builder.header("Content-Type", "application/json");
         }
 
         Request newRequest = builder.build();

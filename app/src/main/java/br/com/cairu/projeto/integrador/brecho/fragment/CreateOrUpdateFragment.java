@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,7 +53,7 @@ public class CreateOrUpdateFragment extends Fragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
 
-        Button saveCategory = view.findViewById(R.id.buttonLogin);
+        Button saveCategory = view.findViewById(R.id.btnSaveCategory);
         EditText name = view.findViewById(R.id.inputCategoryName);
         generic = new Generic(getActivity());
 
@@ -72,8 +73,6 @@ public class CreateOrUpdateFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     @Override

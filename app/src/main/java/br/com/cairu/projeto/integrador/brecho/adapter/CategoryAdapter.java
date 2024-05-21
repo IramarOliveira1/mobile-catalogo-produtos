@@ -3,6 +3,7 @@ package br.com.cairu.projeto.integrador.brecho.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.CategoryFragment;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
@@ -25,9 +27,32 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public TextView nameCategory;
 
+        public ImageButton btnDelete;
+
+        public ImageButton btnUpdate;
+
         public ViewHolder(View view) {
             super(view);
             nameCategory = itemView.findViewById(R.id.nameCategory);
+            btnUpdate = itemView.findViewById(R.id.btnUpdateCategory);
+            btnDelete = itemView.findViewById(R.id.btnDeleteCategory);
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("CAIR EM UPDATE");
+                }
+            });
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    list.remove(getItemCount());
+
+                    new CategoryFragment().delete((long) v.getId());
+                }
+            });
         }
     }
 
@@ -44,6 +69,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         CategoryResponseDTO item = list.get(position);
 
         holder.nameCategory.setText(item.getName().toUpperCase());
+        holder.btnUpdate.setId(Long.valueOf(item.getId()).intValue());
+        holder.btnDelete.setId(Long.valueOf(item.getId()).intValue());
     }
 
     @Override
