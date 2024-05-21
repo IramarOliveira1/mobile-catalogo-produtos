@@ -14,7 +14,7 @@ import okhttp3.Response;
 
 public class ApiInterceptor implements Interceptor {
 
-    private Context context;
+    private final Context context;
 
     public ApiInterceptor(Context context) {
         this.context = context;
@@ -28,7 +28,7 @@ public class ApiInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         Request.Builder builder = originalRequest.newBuilder();
 
-        if (token != null) {
+        if (!token.isEmpty()) {
             builder.header("Authorization", token);
             builder.header("Content-Type", "application/json");
         }

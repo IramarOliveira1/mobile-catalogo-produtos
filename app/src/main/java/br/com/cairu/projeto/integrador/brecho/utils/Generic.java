@@ -13,7 +13,7 @@ import br.com.cairu.projeto.integrador.brecho.R;
 
 public class Generic {
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private static final String TOKEN_KEY = "jwt_token";
     private static final String USERNAME_KEY = "userName";
 

@@ -1,5 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.CategoryRequestDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
@@ -37,7 +40,23 @@ public class CreateOrUpdateFragment extends Fragment {
 
     private Generic generic;
 
+    private ProgressBar progressBar;
+
+    private Button saveCategory;
+
+    private CategoryService categoryService;
+
+    private CategoryResponseDTO categoryResponseDTO;
+
+    private EditText inputCategoryName;
+    private boolean isUpdate;
+
     public CreateOrUpdateFragment() {
+    }
+
+    public CreateOrUpdateFragment(CategoryResponseDTO categoryFragment, boolean isUpdate) {
+        this.categoryResponseDTO = categoryFragment;
+        this.isUpdate = isUpdate;
     }
 
     @Override
@@ -50,26 +69,37 @@ public class CreateOrUpdateFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
+
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
 
-        Button saveCategory = view.findViewById(R.id.btnSaveCategory);
-        EditText name = view.findViewById(R.id.inputCategoryName);
+        saveCategory = view.findViewById(R.id.btnSaveCategory);
+        inputCategoryName = view.findViewById(R.id.inputCategoryName);
+        TextView titleCategory = view.findViewById(R.id.titleCategory);
+
+        progressBar = view.findViewById(R.id.progressBar);
         generic = new Generic(getActivity());
+
+        if (this.isUpdate) {
+            inputCategoryName.setText(this.categoryResponseDTO.getName());
+            saveCategory.setText("ATUALIZAR");
+            titleCategory.setText("Atualizar Categoria");
+        }
 
         saveCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<EditText> editTexts = new ArrayList<>();
 
-                editTexts.add(name);
+                editTexts.add(inputCategoryName);
 
                 boolean verify = generic.empty(editTexts);
 
                 if (!verify) {
-//                    progressBar.setVisibility(View.VISIBLE);
-//                    buttonLogin.setEnabled(false);
-                    createdOrUpdate(name.getText().toString());
+                    progressBar.setVisibility(View.VISIBLE);
+                    saveCategory.setEnabled(false);
+                    createdOrUpdate(inputCategoryName.getText().toString());
                 }
             }
         });
@@ -83,13 +113,16 @@ public class CreateOrUpdateFragment extends Fragment {
     }
 
     public void createdOrUpdate(String name) {
+        if (this.isUpdate) {
+            this.update();
+        } else {
+            this.register(name);
+        }
+    }
+
+    public void register(String name) {
         CategoryRequestDTO categoryRequest = new CategoryRequestDTO(name);
-
-        CategoryService categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
-
-        Call<MessageResponse> call = categoryService.register(categoryRequest);
-
-        call.enqueue(new Callback<MessageResponse>() {
+        categoryService.register(categoryRequest).enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
@@ -97,6 +130,10 @@ public class CreateOrUpdateFragment extends Fragment {
 
                     Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, new CategoryFragment())
+                            .addToBackStack(null)
+                            .commit();
                 } else {
                     try {
                         MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
@@ -104,19 +141,55 @@ public class CreateOrUpdateFragment extends Fragment {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
 
-//                progressBar.setVisibility(View.GONE);
-//                buttonLogin.setEnabled(true);
+                progressBar.setVisibility(View.GONE);
+                saveCategory.setEnabled(false);
             }
 
             @Override
             public void onFailure(Call<MessageResponse> call, Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-//                progressBar.setVisibility(View.GONE);
-//                buttonLogin.setEnabled(true);
+                progressBar.setVisibility(View.GONE);
+                saveCategory.setEnabled(true);
             }
         });
+    }
+
+    public void update() {
+        CategoryRequestDTO categoryRequest = new CategoryRequestDTO(this.categoryResponseDTO.getName());
+        System.out.println(categoryRequest);
+//        categoryService.update(this.categoryResponseDTO.getId(), categoryRequest).enqueue(new Callback<MessageResponse>() {
+//            @Override
+//            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+//                if (response.isSuccessful()) {
+//                    MessageResponse errorResponse = response.body();
+//
+//                    Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.frameLayout, new CategoryFragment())
+//                            .addToBackStack(null)
+//                            .commit();
+//                } else {
+//                    try {
+//                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+//                        Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//                progressBar.setVisibility(View.GONE);
+//                saveCategory.setEnabled(false);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+//                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+//                progressBar.setVisibility(View.GONE);
+//                saveCategory.setEnabled(true);
+//            }
+//        });
     }
 }

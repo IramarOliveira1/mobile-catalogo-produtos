@@ -14,12 +14,18 @@ import retrofit2.http.Path;
 
 public interface CategoryService {
     @GET("/category/all")
-    Call<List<CategoryResponseDTO>> categoryResponseDTO();
+    Call<List<CategoryResponseDTO>> all();
 
     @POST("/category/register")
     Call<MessageResponse> register(@Body CategoryRequestDTO name);
 
     @DELETE("/category/{id}")
     Call<MessageResponse> delete(@Path("id") Long id);
+
+    @GET("/category/{id}")
+    Call<CategoryResponseDTO> index(@Path("id") Long id);
+
+    @GET("/category/{id}")
+    Call<MessageResponse> update(@Path("id") Long id, @Body CategoryRequestDTO name);
 }
 

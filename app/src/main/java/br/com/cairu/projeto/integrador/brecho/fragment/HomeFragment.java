@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +25,12 @@ import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.services.HomeService;
-import br.com.cairu.projeto.integrador.brecho.utils.Dialog;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment implements Dialog {
+public class HomeFragment extends Fragment {
 
     private BottomNavigationView bottomNavigationView;
 
@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment implements Dialog {
     private TextView logout;
 
     private Generic generic;
+
+    private ProgressBar progressBar;
 
     private RecyclerView recyclerView;
 
@@ -89,6 +91,10 @@ public class HomeFragment extends Fragment implements Dialog {
         super.onViewCreated(view, savedInstanceState);
         this.changeScreenProduct(view);
         this.changeScreenCategory(view);
+
+        progressBar = view.findViewById(R.id.progressBar);
+
+        progressBar.setVisibility(View.VISIBLE);
         this.all(view);
 
         logout = view.findViewById(R.id.logout);
@@ -130,28 +136,23 @@ public class HomeFragment extends Fragment implements Dialog {
 
                 TextView totalCategory = view.findViewById(R.id.quantityCategory);
                 totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
+
     }
 
     public void logout() {
-        this.showDialog(
-                "Você deseja realmente sair ?",
-                "Sair",
-                "Cancelar"
-        );
-    }
-
-    @Override
-    public void showDialog(String message, String positiveButton, String negativeButton) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(message);
-        builder.setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
+        builder.setMessage("Você deseja realmente sair ?");
+        builder.setPositiveButton("Sair", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 generic.clear();
@@ -161,7 +162,7 @@ public class HomeFragment extends Fragment implements Dialog {
                         .commit();
             }
         });
-        builder.setNegativeButton(negativeButton, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

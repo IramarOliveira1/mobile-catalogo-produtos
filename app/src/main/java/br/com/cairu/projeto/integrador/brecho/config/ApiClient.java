@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     public Retrofit getClient(Context context){
-
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new ApiInterceptor(context))
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

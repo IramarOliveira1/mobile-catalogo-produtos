@@ -13,14 +13,20 @@ import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.fragment.CategoryFragment;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    private List<CategoryResponseDTO> list;
+    public interface OnItemDeleteListener {
+        void onUpdateItem(int position);
+        void onItemDelete(int position);
+    }
 
-    public CategoryAdapter(List<CategoryResponseDTO> list) {
+    private List<CategoryResponseDTO> list;
+    private final OnItemDeleteListener deleteListener;
+
+    public CategoryAdapter(List<CategoryResponseDTO> list, OnItemDeleteListener deleteListener) {
         this.list = list;
+        this.deleteListener = deleteListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,17 +46,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             btnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("CAIR EM UPDATE");
+                    deleteListener.onUpdateItem(getAdapterPosition());
                 }
             });
-
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    list.remove(getItemCount());
-
-                    new CategoryFragment().delete((long) v.getId());
+                    deleteListener.onItemDelete(getAdapterPosition());
                 }
             });
         }
@@ -69,8 +71,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         CategoryResponseDTO item = list.get(position);
 
         holder.nameCategory.setText(item.getName().toUpperCase());
-        holder.btnUpdate.setId(Long.valueOf(item.getId()).intValue());
-        holder.btnDelete.setId(Long.valueOf(item.getId()).intValue());
+        holder.btnUpdate.setId(item.getId().intValue());
+        holder.btnDelete.setId(item.getId().intValue());
     }
 
     @Override
