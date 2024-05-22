@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.login;
 
 import android.os.Bundle;
 
@@ -22,12 +22,12 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import br.com.cairu.projeto.integrador.brecho.MainActivity;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.ErrorResponse;
-import br.com.cairu.projeto.integrador.brecho.dtos.LoginRequestDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.LoginResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginRequestDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
 import br.com.cairu.projeto.integrador.brecho.services.LoginService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
@@ -88,7 +88,7 @@ public class LoginFragment extends Fragment {
     public void login(String email, String password) {
         LoginRequestDTO loginRequest = new LoginRequestDTO(email, password);
 
-        LoginService loginService = new ApiClient().getClient().create(LoginService.class);
+        LoginService loginService = new ApiClient().getClient(getActivity()).create(LoginService.class);
 
         Call<LoginResponseDTO> call = loginService.login(loginRequest);
         call.enqueue(new Callback<LoginResponseDTO>() {
@@ -112,7 +112,7 @@ public class LoginFragment extends Fragment {
                     changeFrament();
                 } else {
                     try {
-                        ErrorResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
                         Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

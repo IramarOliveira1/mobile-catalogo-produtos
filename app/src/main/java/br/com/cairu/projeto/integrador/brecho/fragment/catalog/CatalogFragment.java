@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.catalog;
 
 import android.os.Bundle;
 

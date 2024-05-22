@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp"
-    tools:context=".fragment.HomeFragment">
+    tools:context=".fragment.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -122,7 +122,6 @@
             app:layout_constraintStart_toEndOf="@+id/quantityCategory"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <TextView
             android:id="@+id/homeNameCategory"
             android:layout_width="wrap_content"
@@ -166,7 +165,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleView"
+            android:id="@+id/recycleViewHome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
@@ -174,9 +173,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            tools:listitem="@layout/items_recicle_view_home" />
+            tools:listitem="@layout/items_recyclerview_home" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/bg_progress_bar"
+            android:progress="0"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/recycleViewHome"
+            app:layout_constraintTop_toTopOf="@+id/recycleViewHome" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>
