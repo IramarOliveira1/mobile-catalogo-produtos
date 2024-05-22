@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.login;
 
 import android.os.Bundle;
 
@@ -24,9 +24,10 @@ import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
-import br.com.cairu.projeto.integrador.brecho.dtos.LoginRequestDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.LoginResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginRequestDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
 import br.com.cairu.projeto.integrador.brecho.services.LoginService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;

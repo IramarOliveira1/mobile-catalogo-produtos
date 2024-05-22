@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.dtos;
+package br.com.cairu.projeto.integrador.brecho.dtos.category;
 
 public class CategoryResponseDTO {
     private Long id;

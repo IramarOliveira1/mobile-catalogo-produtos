@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
-import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.home.HomeResponseDTO;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 

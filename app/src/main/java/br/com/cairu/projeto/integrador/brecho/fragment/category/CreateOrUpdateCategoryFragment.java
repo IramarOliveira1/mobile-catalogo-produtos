@@ -1,6 +1,5 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.category;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryRequestDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryRequestDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import br.com.cairu.projeto.integrador.brecho.utils.InitToolbar;
@@ -36,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateOrUpdateFragment extends Fragment {
+public class CreateOrUpdateCategoryFragment extends Fragment {
 
     private Generic generic;
 
@@ -51,10 +50,10 @@ public class CreateOrUpdateFragment extends Fragment {
     private EditText inputCategoryName;
     private boolean isUpdate;
 
-    public CreateOrUpdateFragment() {
+    public CreateOrUpdateCategoryFragment() {
     }
 
-    public CreateOrUpdateFragment(CategoryResponseDTO categoryFragment, boolean isUpdate) {
+    public CreateOrUpdateCategoryFragment(CategoryResponseDTO categoryFragment, boolean isUpdate) {
         this.categoryResponseDTO = categoryFragment;
         this.isUpdate = isUpdate;
     }
@@ -114,7 +113,7 @@ public class CreateOrUpdateFragment extends Fragment {
 
     public void createdOrUpdate(String name) {
         if (this.isUpdate) {
-            this.update();
+            this.update(name);
         } else {
             this.register(name);
         }
@@ -126,9 +125,9 @@ public class CreateOrUpdateFragment extends Fragment {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
-                    MessageResponse errorResponse = response.body();
+                    MessageResponse messageResponse = response.body();
 
-                    Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, new CategoryFragment())
@@ -136,8 +135,8 @@ public class CreateOrUpdateFragment extends Fragment {
                             .commit();
                 } else {
                     try {
-                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
-                        Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -156,40 +155,39 @@ public class CreateOrUpdateFragment extends Fragment {
         });
     }
 
-    public void update() {
-        CategoryRequestDTO categoryRequest = new CategoryRequestDTO(this.categoryResponseDTO.getName());
-        System.out.println(categoryRequest);
-//        categoryService.update(this.categoryResponseDTO.getId(), categoryRequest).enqueue(new Callback<MessageResponse>() {
-//            @Override
-//            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-//                if (response.isSuccessful()) {
-//                    MessageResponse errorResponse = response.body();
-//
-//                    Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.frameLayout, new CategoryFragment())
-//                            .addToBackStack(null)
-//                            .commit();
-//                } else {
-//                    try {
-//                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
-//                        Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//
-//                progressBar.setVisibility(View.GONE);
-//                saveCategory.setEnabled(false);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
-//                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-//                progressBar.setVisibility(View.GONE);
-//                saveCategory.setEnabled(true);
-//            }
-//        });
+    public void update(String name) {
+        CategoryRequestDTO categoryRequest = new CategoryRequestDTO(name);
+        categoryService.update(this.categoryResponseDTO.getId(), categoryRequest).enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                if (response.isSuccessful()) {
+                    MessageResponse messageResponse = response.body();
+
+                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, new CategoryFragment())
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    try {
+                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                progressBar.setVisibility(View.GONE);
+                saveCategory.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                saveCategory.setEnabled(true);
+            }
+        });
     }
 }

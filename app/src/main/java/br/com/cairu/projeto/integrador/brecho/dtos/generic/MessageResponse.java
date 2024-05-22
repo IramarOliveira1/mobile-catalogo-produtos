@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.dtos;
+package br.com.cairu.projeto.integrador.brecho.dtos.generic;
 
 public class MessageResponse {
     private String message;

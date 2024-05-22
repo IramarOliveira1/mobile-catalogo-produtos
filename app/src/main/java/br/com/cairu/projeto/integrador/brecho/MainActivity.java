@@ -14,12 +14,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import br.com.cairu.projeto.integrador.brecho.fragment.CatalogFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.CategoryFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.HomeFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.LoginFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.ProductFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.UserFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.catalog.CatalogFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.category.CategoryFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.product.ProductFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.user.UserFragment;
 
 public class MainActivity extends AppCompatActivity {
 

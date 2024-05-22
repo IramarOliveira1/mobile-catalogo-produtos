@@ -28,7 +28,7 @@ public class ApiInterceptor implements Interceptor {
         Request originalRequest = chain.request();
         Request.Builder builder = originalRequest.newBuilder();
 
-        if (!token.isEmpty()) {
+        if (token != null) {
             builder.header("Authorization", token);
             builder.header("Content-Type", "application/json");
         }

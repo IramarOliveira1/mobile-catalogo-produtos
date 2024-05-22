@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.category;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,9 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,8 +27,8 @@ import java.util.List;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.CategoryAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -107,7 +105,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frameLayout, new CreateOrUpdateFragment())
+                        .replace(R.id.frameLayout, new CreateOrUpdateCategoryFragment())
                         .addToBackStack(null)
                         .commit();
             }
@@ -150,7 +148,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
                     CategoryResponseDTO categoryResponseDTO = response.body();
 
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, new CreateOrUpdateFragment(categoryResponseDTO, true))
+                            .replace(R.id.frameLayout, new CreateOrUpdateCategoryFragment(categoryResponseDTO, true))
                             .addToBackStack(null)
                             .commit();
                 }

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 

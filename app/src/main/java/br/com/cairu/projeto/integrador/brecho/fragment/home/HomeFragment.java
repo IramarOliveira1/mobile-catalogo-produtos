@@ -1,4 +1,4 @@
-package br.com.cairu.projeto.integrador.brecho.fragment;
+package br.com.cairu.projeto.integrador.brecho.fragment.home;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,7 +23,10 @@ import java.util.List;
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.HomeResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.home.HomeResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.product.ProductFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.category.CategoryFragment;
 import br.com.cairu.projeto.integrador.brecho.services.HomeService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;

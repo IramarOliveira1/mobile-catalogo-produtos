@@ -2,14 +2,15 @@ package br.com.cairu.projeto.integrador.brecho.services;
 
 import java.util.List;
 
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryRequestDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.CategoryResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryRequestDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface CategoryService {
@@ -25,7 +26,7 @@ public interface CategoryService {
     @GET("/category/{id}")
     Call<CategoryResponseDTO> index(@Path("id") Long id);
 
-    @GET("/category/{id}")
-    Call<MessageResponse> update(@Path("id") Long id, @Body CategoryRequestDTO name);
+    @PUT("/category/{id}")
+    Call<MessageResponse> update(@Path("id") Long id, @Body CategoryRequestDTO categoryRequestDTO);
 }
 
