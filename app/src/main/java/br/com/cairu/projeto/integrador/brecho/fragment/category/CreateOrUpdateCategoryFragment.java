@@ -71,6 +71,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
         categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+
         new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
 
         saveCategory = view.findViewById(R.id.btnSaveCategory);
