@@ -38,15 +38,10 @@ import retrofit2.Response;
 public class CreateOrUpdateCategoryFragment extends Fragment {
 
     private Generic generic;
-
     private ProgressBar progressBar;
-
     private Button saveCategory;
-
     private CategoryService categoryService;
-
     private CategoryResponseDTO categoryResponseDTO;
-
     private EditText inputCategoryName;
     private boolean isUpdate;
 
@@ -71,6 +66,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
         categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
+
         new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
 
         saveCategory = view.findViewById(R.id.btnSaveCategory);
@@ -93,7 +89,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
                 editTexts.add(inputCategoryName);
 
-                boolean verify = generic.empty(editTexts);
+                boolean verify = generic.empty(editTexts, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);

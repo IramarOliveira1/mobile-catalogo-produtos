@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import br.com.cairu.projeto.integrador.brecho.fragment.catalog.CatalogFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.category.CategoryFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.product.ProductFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.user.UserFragment;
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loadFragment(new CategoryFragment(), true);
+        loadFragment(new UserFragment(), true);
     }
 
     public void loadFragment(Fragment fragment, boolean isAppInitialized) {

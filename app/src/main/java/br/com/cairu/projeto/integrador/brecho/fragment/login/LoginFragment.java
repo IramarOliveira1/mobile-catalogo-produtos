@@ -58,7 +58,9 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        generic = new Generic(getActivity());
+        generic = new Generic(requireContext());
+
+        System.out.println(generic);
 
         buttonLogin = view.findViewById(R.id.buttonLogin);
         email = view.findViewById(R.id.editEmail);
@@ -69,12 +71,13 @@ public class LoginFragment extends Fragment {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 ArrayList<EditText> editTexts = new ArrayList<>();
 
                 editTexts.add(email);
                 editTexts.add(password);
 
-                boolean verify = generic.empty(editTexts);
+                boolean verify = generic.empty(editTexts, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);

@@ -51,4 +51,7 @@ dependencies {
     //okhttp
     implementation(platform(libs.okhttp.bom))
     implementation(libs.logging.interceptor)
+
+    //mask
+    implementation(libs.maskara)
 }
