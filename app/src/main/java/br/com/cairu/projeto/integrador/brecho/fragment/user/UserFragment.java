@@ -29,6 +29,7 @@ import br.com.cairu.projeto.integrador.brecho.adapter.UserAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.category.CreateOrUpdateCategoryFragment;
 import br.com.cairu.projeto.integrador.brecho.services.UserService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -140,32 +141,33 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
         });
     }
 
-//    public void index(Long id) {
-//        userService.index(id).enqueue(new Callback<UserResponseDTO>() {
-//            @Override
-//            public void onResponse(Call<UserResponseDTO> call, Response<UserResponseDTO> response) {
-//                if (response.isSuccessful()) {
-//                    UserResponseDTO userResponseDTO = response.body();
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.frameLayout, new CreateOrUpdateUserFragment.class(UserResponseDTO, true))
-//                            .addToBackStack(null)
-//                            .commit();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UserResponseDTO> call, Throwable throwable) {
-//                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    public void index(Long id) {
+        userService.index(id).enqueue(new Callback<UserResponseDTO>() {
+            @Override
+            public void onResponse(Call<UserResponseDTO> call, Response<UserResponseDTO> response) {
+                if (response.isSuccessful()) {
+                    UserResponseDTO userResponseDTO = response.body();
+
+                    System.out.println(userResponseDTO);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, new CreateOrUpdateUserFragment(userResponseDTO, true))
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponseDTO> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public void onUpdateItem(int position) {
         UserResponseDTO item = itemList.get(position);
 
-//        this.index(item.getId());
+        this.index(item.getId());
     }
 
     @Override

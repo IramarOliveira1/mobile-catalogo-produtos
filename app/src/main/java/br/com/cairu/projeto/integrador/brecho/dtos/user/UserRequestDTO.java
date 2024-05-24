@@ -6,7 +6,7 @@ public class UserRequestDTO {
     private String email;
     private String cpf;
     private String password;
-    private boolean isAdmin;
+    private boolean admin;
     private String phone;
 
     public String getName() {
@@ -42,11 +42,11 @@ public class UserRequestDTO {
     }
 
     public boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(boolean isAdmin) {
+        admin = isAdmin;
     }
 
     public String getPhone() {

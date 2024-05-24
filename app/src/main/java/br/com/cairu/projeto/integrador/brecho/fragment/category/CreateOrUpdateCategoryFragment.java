@@ -38,15 +38,10 @@ import retrofit2.Response;
 public class CreateOrUpdateCategoryFragment extends Fragment {
 
     private Generic generic;
-
     private ProgressBar progressBar;
-
     private Button saveCategory;
-
     private CategoryService categoryService;
-
     private CategoryResponseDTO categoryResponseDTO;
-
     private EditText inputCategoryName;
     private boolean isUpdate;
 

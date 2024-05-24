@@ -61,12 +61,15 @@ public class Generic {
             }
         }
 
-        for (MaskEditText maskEditText : maskEditTexts) {
-            if (maskEditText.getText().toString().trim().isEmpty()) {
-                maskEditText.setError("Preencha este campo.");
-                validate = true;
+        if (maskEditTexts != null) {
+            for (MaskEditText maskEditText : maskEditTexts) {
+                if (maskEditText.getText().toString().trim().isEmpty()) {
+                    maskEditText.setError("Preencha este campo.");
+                    validate = true;
+                }
             }
         }
+
         return validate;
     }
 }

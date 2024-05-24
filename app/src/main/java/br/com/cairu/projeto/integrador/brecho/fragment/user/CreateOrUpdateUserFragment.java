@@ -13,11 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,13 +29,9 @@ import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryRequestDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.fragment.category.CategoryFragment;
-import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.services.UserService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import br.com.cairu.projeto.integrador.brecho.utils.InitToolbar;
@@ -46,25 +42,28 @@ import retrofit2.Response;
 public class CreateOrUpdateUserFragment extends Fragment {
 
     private Generic generic;
-
     private ProgressBar progressBar;
-
     private Button saveUser;
-
     private UserService userService;
-
     private UserResponseDTO userResponseDTO;
-
     private EditText inputUserName;
     private EditText inputUserEmail;
     private MaskEditText inputUserCpf;
     private EditText inputUserPassword;
-    private Spinner inputUserIsAdmin;
     private MaskEditText inputUserPhone;
     private boolean isAdmin;
     private boolean isAdminEmpty = false;
+    private Spinner inputUserIsAdmin;
+    private boolean isUpdate;
+
+    private ArrayAdapter<CharSequence> adapter;
 
     public CreateOrUpdateUserFragment() {
+    }
+
+    public CreateOrUpdateUserFragment(UserResponseDTO userResponseDTO, boolean isUpdate) {
+        this.userResponseDTO = userResponseDTO;
+        this.isUpdate = isUpdate;
     }
 
     @Override
@@ -74,7 +73,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         inputUserIsAdmin = view.findViewById(R.id.inputUserIsAdmin);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        adapter = ArrayAdapter.createFromResource(
                 requireContext(),
                 R.array.isAdmin,
                 android.R.layout.simple_spinner_item
@@ -89,6 +88,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 isAdminEmpty = position != 0;
+
                 if (selectedItem.equals("Sim") && position > 0) {
                     isAdmin = true;
                 } else {
@@ -124,6 +124,24 @@ public class CreateOrUpdateUserFragment extends Fragment {
         generic = new Generic(getActivity());
         progressBar = view.findViewById(R.id.progressBar);
 
+        if (this.isUpdate) {
+            inputUserName.setText(this.userResponseDTO.getName());
+            inputUserEmail.setText(this.userResponseDTO.getEmail());
+            inputUserCpf.setText(this.userResponseDTO.getCpf());
+            inputUserPhone.setText(this.userResponseDTO.getPhone());
+
+            System.out.println(this.userResponseDTO.isAdmin());
+            if (this.userResponseDTO.isAdmin()) {
+                inputUserIsAdmin.setSelection(adapter.getPosition("Sim"));
+            } else {
+                inputUserIsAdmin.setSelection(adapter.getPosition("Não"));
+            }
+
+            saveUser.setText("ATUALIZAR");
+            TextView titleUser = view.findViewById(R.id.titleUserToolbar);
+            titleUser.setText("Atualizar Usuário");
+        }
+
         saveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,11 +164,18 @@ public class CreateOrUpdateUserFragment extends Fragment {
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);
                     saveUser.setEnabled(false);
-                    register();
-//                    createdOrUpdate(inputCategoryName.getText().toString());
+                    createdOrUpdate();
                 }
             }
         });
+    }
+
+    public void createdOrUpdate() {
+        if (this.isUpdate) {
+            this.update();
+        } else {
+            this.register();
+        }
     }
 
     @Override
@@ -166,8 +191,8 @@ public class CreateOrUpdateUserFragment extends Fragment {
         userRequestDTO.setName(inputUserName.getText().toString());
         userRequestDTO.setEmail(inputUserEmail.getText().toString());
         userRequestDTO.setCpf(inputUserCpf.getText().toString());
-        userRequestDTO.setPassword(inputUserPassword.getText().toString());
         userRequestDTO.setAdmin(isAdmin);
+        userRequestDTO.setPassword(inputUserPassword.getText().toString());
         userRequestDTO.setPhone(inputUserPhone.getText().toString());
 
         userService.register(userRequestDTO).enqueue(new Callback<MessageResponse>() {
@@ -193,6 +218,50 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
                 progressBar.setVisibility(View.GONE);
                 saveUser.setEnabled(false);
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                saveUser.setEnabled(true);
+            }
+        });
+    }
+
+    public void update() {
+        UserRequestDTO userRequestDTO = new UserRequestDTO();
+
+        userRequestDTO.setName(inputUserName.getText().toString());
+        userRequestDTO.setEmail(inputUserEmail.getText().toString());
+        userRequestDTO.setCpf(inputUserCpf.getText().toString());
+        userRequestDTO.setAdmin(isAdmin);
+        userRequestDTO.setPassword(inputUserPassword.getText().toString());
+        userRequestDTO.setPhone(inputUserPhone.getText().toString());
+        userService.update(this.userResponseDTO.getId(), userRequestDTO).enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                if (response.isSuccessful()) {
+                    MessageResponse messageResponse = response.body();
+
+                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frameLayout, new UserFragment())
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    try {
+                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        System.out.println("ERROR " + messageResponse.getMessage());
+                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                progressBar.setVisibility(View.GONE);
+                saveUser.setEnabled(true);
             }
 
             @Override
