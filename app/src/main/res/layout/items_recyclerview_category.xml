@@ -49,11 +49,8 @@
                 android:background="@drawable/bg_btn_delete"
                 android:padding="8dp"
                 android:src="@drawable/delete_bin_line" />
-
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loadFragment(new UserFragment(), true);
+        loadFragment(new ProductFragment(), true);
     }
 
     public void loadFragment(Fragment fragment, boolean isAppInitialized) {
