@@ -9,15 +9,6 @@ public class UserRequestDTO {
     private boolean isAdmin;
     private String phone;
 
-    public UserRequestDTO(String name, String email, String cpf, String password, boolean isAdmin, String phone) {
-        this.name = name;
-        this.email = email;
-        this.cpf = cpf;
-        this.password = password;
-        this.isAdmin = isAdmin;
-        this.phone = phone;
-    }
-
     public String getName() {
         return name;
     }

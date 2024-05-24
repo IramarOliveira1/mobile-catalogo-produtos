@@ -52,7 +52,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-
                 <TextView
                     android:id="@+id/labelNameUser"
                     android:layout_width="match_parent"
@@ -89,7 +88,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:padding="16dp"
                     tools:text="Josy@brecho.com" />
 
@@ -102,16 +101,21 @@
                     android:text="CPF"
                     android:textStyle="bold" />
 
-                <EditText
+
+                <com.santalu.maskara.widget.MaskEditText
                     android:id="@+id/inputUserCpf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:padding="16dp"
+                    app:mask="___.___.___-__"
+                    app:maskCharacter="_"
+                    app:maskStyle="completable"
                     tools:text="000.000.000-00" />
+
 
                 <TextView
                     android:id="@+id/labelPasswordUser"
@@ -142,16 +146,15 @@
                     android:text="Admin"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/inputUserAdmin"
+                <Spinner
+                    android:id="@+id/inputUserIsAdmin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
                     android:inputType="text"
-                    android:padding="16dp"
-                    tools:text="Sim" />
+                    android:padding="16dp" />
 
                 <TextView
                     android:id="@+id/labelPhoneUser"
@@ -162,16 +165,21 @@
                     android:text="Telefone"
                     android:textStyle="bold" />
 
-                <EditText
+
+                <com.santalu.maskara.widget.MaskEditText
                     android:id="@+id/inputUserPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
-                    android:inputType="phone"
+                    android:inputType="number"
                     android:padding="16dp"
+                    app:mask="(__) _____-____"
+                    app:maskCharacter="_"
+                    app:maskStyle="completable"
                     tools:text="(99) 99999-9999" />
+
 
                 <ProgressBar
                     android:id="@+id/progressBar"

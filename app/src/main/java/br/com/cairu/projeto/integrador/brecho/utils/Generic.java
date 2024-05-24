@@ -3,9 +3,13 @@ package br.com.cairu.projeto.integrador.brecho.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.ArrayList;
 
@@ -47,12 +51,19 @@ public class Generic {
         return sharedPreferences.getString(USERNAME_KEY, null);
     }
 
-    public boolean empty(ArrayList<EditText> editTexts) {
+    public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts) {
         boolean validate = false;
 
         for (EditText editText : editTexts) {
             if (editText.getText().toString().trim().isEmpty()) {
                 editText.setError("Preencha este campo.");
+                validate = true;
+            }
+        }
+
+        for (MaskEditText maskEditText : maskEditTexts) {
+            if (maskEditText.getText().toString().trim().isEmpty()) {
+                maskEditText.setError("Preencha este campo.");
                 validate = true;
             }
         }

@@ -94,7 +94,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
                 editTexts.add(inputCategoryName);
 
-                boolean verify = generic.empty(editTexts);
+                boolean verify = generic.empty(editTexts, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);
