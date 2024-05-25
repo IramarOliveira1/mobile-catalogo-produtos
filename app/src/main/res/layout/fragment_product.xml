@@ -49,34 +49,45 @@
             android:id="@+id/recyclerViewFilterCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="20dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchProductList"
             tools:itemCount="1"
             tools:listitem="@layout/items_recyclerview_filter_product" />
 
+        <TextView
+            android:id="@+id/notfoundCategoryProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewFilterCategory"
+            tools:text="Nenhum produto encontrado para essa categoria." />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewProduct"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewFilterCategory"
             tools:listitem="@layout/items_recyclerview_product" />
 
-        <!--        <ProgressBar-->
-        <!--            android:id="@+id/progressBar"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_centerInParent="true"-->
-        <!--            android:indeterminate="true"-->
-        <!--            android:indeterminateDrawable="@drawable/bg_progress_bar"-->
-        <!--            android:progress="0"-->
-        <!--            android:visibility="gone"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="@+id/recycleViewUser" />-->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/bg_progress_bar"
+            android:progress="0"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerViewProduct" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

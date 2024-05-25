@@ -13,19 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
+import br.com.cairu.projeto.integrador.brecho.models.Category;
 
 public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAdapter.ViewHolder> {
 
     public interface onItemClickListener {
-        void onItemClick(String category, int position);
+        void onItemClick(String category, int position, Long id);
     }
 
-    private List<String> categoryList;
+    private final List<Category> categoryList;
     private final onItemClickListener listener;
-
     private int selectedPosition = 0;
 
-    public FilterCategoryAdapter(List<String> list, onItemClickListener deleteListener) {
+    public FilterCategoryAdapter(List<Category> list, onItemClickListener deleteListener) {
         this.categoryList = list;
         this.listener = deleteListener;
     }
@@ -40,9 +40,9 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String category = categoryList.get(position);
+        Category category = categoryList.get(position);
 
-        holder.categoryName.setText(category.toUpperCase());
+        holder.categoryName.setText(category.getName().toUpperCase());
 
         if (position == selectedPosition) {
             holder.categoryName.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.bg_btn_delete));
@@ -59,7 +59,7 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
                 selectedPosition = holder.getAdapterPosition();
                 notifyItemChanged(previousPosition);
                 notifyItemChanged(selectedPosition);
-                listener.onItemClick(category, selectedPosition);
+                listener.onItemClick(category.getName().toUpperCase(), selectedPosition, category.getId());
             }
         });
     }
@@ -69,8 +69,8 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
         return categoryList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView categoryName;
 
         public ViewHolder(View view) {
             super(view);

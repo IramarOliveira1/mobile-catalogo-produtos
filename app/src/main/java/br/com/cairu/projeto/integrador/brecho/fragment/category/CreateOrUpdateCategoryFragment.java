@@ -139,7 +139,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
                 }
 
                 progressBar.setVisibility(View.GONE);
-                saveCategory.setEnabled(false);
+                saveCategory.setEnabled(true);
             }
 
             @Override

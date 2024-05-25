@@ -1,6 +1,12 @@
 package br.com.cairu.projeto.integrador.brecho.models;
 
 public class Category {
+
+
+    private Long id;
+
+    private String name;
+
     public Long getId() {
         return id;
     }
@@ -9,15 +15,11 @@ public class Category {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    private Long id;
-
-    private String nome;
 }

@@ -32,9 +32,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameCategory;
-
         public ImageButton btnDelete;
-
         public ImageButton btnUpdate;
 
         public ViewHolder(View view) {

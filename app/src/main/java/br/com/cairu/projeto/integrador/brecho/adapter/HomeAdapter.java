@@ -52,9 +52,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HomeResponseDTO item = list.get(position);
 
+        System.out.println(holder.images);
         holder.nameProduct.setText(item.getName().toUpperCase());
         holder.countClick.setText(String.valueOf(item.getCountClick() + " clicks"));
-//        Picasso.get().load("http://10.0.2.2:8080/" + item.getFile().getUrl()).into(holder.images);
+        Picasso.get().load("http://10.0.2.2:8080/" + item.getFile().getUrl()).into(holder.images);
+
         Picasso.get().load("http://10.0.2.2:8080/public/images/1714138911150.png").into(holder.images);
     }
 
