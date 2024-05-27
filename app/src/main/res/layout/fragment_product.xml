@@ -64,6 +64,7 @@
             android:layout_marginTop="80dp"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewFilterCategory"
             tools:text="Nenhum produto encontrado para essa categoria." />
@@ -71,9 +72,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewProduct"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
             android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewFilterCategory"
             tools:listitem="@layout/items_recyclerview_product" />
 

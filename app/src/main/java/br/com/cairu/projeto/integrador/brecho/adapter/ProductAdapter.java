@@ -1,5 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -52,8 +54,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductResponseDTO item = list.get(position);
 
+        Locale locale = new Locale("pt", "BR");
+
+        String convertMoney = NumberFormat.getCurrencyInstance(locale).format(Double.parseDouble(item.getPrice()));
+
         holder.name.setText(item.getName());
-        holder.price.setText("R$ " + item.getPrice());
+        holder.price.setText(convertMoney);
         holder.btnDelete.setId(item.getId().intValue());
         holder.btnUpdate.setId(item.getId().intValue());
 
@@ -65,6 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return list.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void filter(String text) {
         text = text.toLowerCase(Locale.getDefault());
 
@@ -94,6 +101,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
+
             name = itemView.findViewById(R.id.nameProduct);
             price = itemView.findViewById(R.id.priceProduct);
             btnDelete = itemView.findViewById(R.id.btnDeleteProduct);

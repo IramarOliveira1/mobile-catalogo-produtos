@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment {
                 editTexts.add(email);
                 editTexts.add(password);
 
-                boolean verify = generic.empty(editTexts, null);
+                boolean verify = generic.empty(editTexts, null, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);

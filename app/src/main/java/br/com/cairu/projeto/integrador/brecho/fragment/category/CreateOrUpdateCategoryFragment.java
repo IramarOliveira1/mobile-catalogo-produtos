@@ -74,7 +74,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
         TextView titleCategory = view.findViewById(R.id.titleCategory);
 
         progressBar = view.findViewById(R.id.progressBar);
-        generic = new Generic(getActivity());
+        generic = new Generic(requireContext());
 
         if (this.isUpdate) {
             inputCategoryName.setText(this.categoryResponseDTO.getName());
@@ -89,7 +89,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
                 editTexts.add(inputCategoryName);
 
-                boolean verify = generic.empty(editTexts, null);
+                boolean verify = generic.empty(editTexts, null, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);

@@ -54,4 +54,6 @@ dependencies {
 
     //mask
     implementation(libs.maskara)
+    implementation(libs.mask)
+
 }

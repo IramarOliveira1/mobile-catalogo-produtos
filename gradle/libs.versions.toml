@@ -11,13 +11,13 @@ constraintlayout = "2.1.4"
 retrofit = "2.11.0"
 okhttp-bom = "4.12.0"
 picasso = "2.8"
+mask = "2.0.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-maskara = { module = "com.github.santalu:maskara", version.ref = "maskara" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -33,6 +33,12 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 
 #picasso
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+
+#mask
+maskara = { module = "com.github.santalu:maskara", version.ref = "maskara" }
+mask = { module = "com.github.BlacKCaT27:CurrencyEditText", version.ref = "mask" }
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

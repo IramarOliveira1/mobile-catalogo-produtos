@@ -1,9 +1,17 @@
 package br.com.cairu.projeto.integrador.brecho.dtos.category;
 
+import androidx.annotation.NonNull;
+
 public class CategoryResponseDTO {
     private Long id;
 
-    private  String name;
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    private String name;
 
     public Long getId() {
         return id;

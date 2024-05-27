@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class Generic {
         return sharedPreferences.getString(USERNAME_KEY, null);
     }
 
-    public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts) {
+    public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts, @Nullable ArrayList<CurrencyEditText> currencyEditTexts) {
         boolean validate = false;
 
         for (EditText editText : editTexts) {
@@ -65,6 +66,14 @@ public class Generic {
             for (MaskEditText maskEditText : maskEditTexts) {
                 if (maskEditText.getText().toString().trim().isEmpty()) {
                     maskEditText.setError("Preencha este campo.");
+                    validate = true;
+                }
+            }
+        }
+        if (currencyEditTexts != null) {
+            for (CurrencyEditText currencyEditText : currencyEditTexts) {
+                if (currencyEditText.getText().toString().trim().isEmpty()) {
+                    currencyEditText.setError("Preencha este campo.");
                     validate = true;
                 }
             }

@@ -75,7 +75,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         adapter = ArrayAdapter.createFromResource(
                 requireContext(),
-                R.array.isAdmin,
+                R.array.trueOrFalse,
                 android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -154,7 +154,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
                 maskEditTexts.add(inputUserPhone);
                 maskEditTexts.add(inputUserCpf);
 
-                boolean verify = generic.empty(editTexts, maskEditTexts);
+                boolean verify = generic.empty(editTexts, maskEditTexts, null);
 
                 if (!isAdminEmpty) {
                     Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo Admin", Toast.LENGTH_SHORT).show();

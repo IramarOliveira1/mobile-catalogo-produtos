@@ -17,9 +17,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,10 +31,8 @@ import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.FilterCategoryAdapter;
-import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
-import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
@@ -53,9 +51,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<ProductResponseDTO> itemList;
     private List<Category> itemListCategory;
     private TextView categoryEmpty;
-    private EditText searchProduct;
-
-    private RecyclerView productRecyclerView;
 
     public ProductFragment() {
     }
@@ -77,7 +72,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
         categoryEmpty = view.findViewById(R.id.notfoundCategoryProduct);
 
-        productRecyclerView = view.findViewById(R.id.recyclerViewProduct);
+        RecyclerView productRecyclerView = view.findViewById(R.id.recyclerViewProduct);
 
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);
         productRecyclerView.setLayoutManager(layoutManager);
@@ -88,7 +83,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         productAdapter = new ProductAdapter(itemList, this);
         productRecyclerView.setAdapter(productAdapter);
 
-        searchProduct = view.findViewById(R.id.searchProductList);
+        EditText searchProduct = view.findViewById(R.id.searchProductList);
 
         searchProduct.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,6 +103,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
         all();
         recyclerViewFilterCategory(view);
+        createOrUpdate(view);
     }
 
     public void recyclerViewFilterCategory(View view) {
@@ -167,6 +163,21 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             public void onFailure(Call<List<ProductResponseDTO>> call, Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+    public void createOrUpdate(View view) {
+        Button buttonTextView = view.findViewById(R.id.createProduct);
+        buttonTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new CreateOrUpdateProductFragment())
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
