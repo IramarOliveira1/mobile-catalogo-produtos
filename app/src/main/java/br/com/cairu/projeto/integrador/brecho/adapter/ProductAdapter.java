@@ -1,26 +1,23 @@
 package br.com.cairu.projeto.integrador.brecho.adapter;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import br.com.cairu.projeto.integrador.brecho.R;
-import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
@@ -33,14 +30,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void onItemClick(String category, int position);
     }
 
-    private List<ProductResponseDTO> list;
-
-    private List<ProductResponseDTO> filteredItemList;
-    private final ProductAdapter.OnItemDeleteListener listener;
+    private final List<ProductResponseDTO> list;
+    private final List<ProductResponseDTO> listName;
+    private final OnItemDeleteListener listener;
 
     public ProductAdapter(List<ProductResponseDTO> list, OnItemDeleteListener listener) {
         this.list = list;
         this.listener = listener;
+        this.listName = new ArrayList<>(list);
     }
 
     @NonNull
@@ -68,7 +65,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         return list.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void filter(String text) {
+        text = text.toLowerCase(Locale.getDefault());
+
+        if (listName.isEmpty()) {
+            listName.addAll(list);
+        }
+
+        list.clear();
+        if (text.isEmpty()) {
+            list.addAll(listName);
+        } else {
+            String finalText = text;
+            list.addAll(listName.stream()
+                    .filter(product -> product.getName().toLowerCase(Locale.getDefault()).contains(finalText))
+                    .collect(Collectors.toList()));
+        }
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
         public TextView price;
@@ -83,6 +99,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             btnDelete = itemView.findViewById(R.id.btnDeleteProduct);
             btnUpdate = itemView.findViewById(R.id.btnUpdateProduct);
             images = itemView.findViewById(R.id.imageProduct);
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemDelete(getAdapterPosition());
+                }
+            });
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemDelete(getAdapterPosition());
+                }
+            });
         }
     }
 }

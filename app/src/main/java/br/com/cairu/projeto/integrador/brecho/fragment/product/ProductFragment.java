@@ -1,6 +1,8 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.product;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,17 +17,25 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.FilterCategoryAdapter;
+import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
 import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
@@ -43,8 +53,9 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<ProductResponseDTO> itemList;
     private List<Category> itemListCategory;
     private TextView categoryEmpty;
+    private EditText searchProduct;
 
-    private TextView searchProduct;
+    private RecyclerView productRecyclerView;
 
     public ProductFragment() {
     }
@@ -66,7 +77,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
         categoryEmpty = view.findViewById(R.id.notfoundCategoryProduct);
 
-        RecyclerView productRecyclerView = view.findViewById(R.id.recyclerViewProduct);
+        productRecyclerView = view.findViewById(R.id.recyclerViewProduct);
 
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);
         productRecyclerView.setLayoutManager(layoutManager);
@@ -86,8 +97,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                productAdapter.filter(s.toString());
-                System.out.println(s.toString());
+                productAdapter.filter(s.toString());
             }
 
             @Override
@@ -95,7 +105,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
             }
         });
-
 
         all();
         recyclerViewFilterCategory(view);
@@ -116,6 +125,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<ProductAndCategory> call, Response<ProductAndCategory> response) {
+
                 itemList.clear();
                 itemList.addAll(response.body().getProducts());
                 productAdapter.notifyDataSetChanged();
@@ -132,7 +142,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
             @Override
             public void onFailure(@NonNull Call<ProductAndCategory> call, @NonNull Throwable throwable) {
-                System.out.println(throwable.getMessage());
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
@@ -156,11 +165,60 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
             @Override
             public void onFailure(Call<List<ProductResponseDTO>> call, Throwable throwable) {
-                System.out.println(throwable.getMessage());
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+
+    public void delete(Long id, int position) {
+        productService.delete(id).enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+                if (response.isSuccessful()) {
+                    MessageResponse messageResponse = response.body();
+
+                    itemList.remove(position);
+                    productAdapter.notifyItemRemoved(position);
+
+                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void confirmDelete(Long id, int position) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Você deseja realmente apagar esse produto ?");
+        builder.setPositiveButton("Apagar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                delete(id, position);
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -169,6 +227,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
     @Override
     public void onItemDelete(int position) {
+        ProductResponseDTO item = itemList.get(position);
+        this.confirmDelete(item.getId(), position);
     }
 
     @Override
