@@ -130,7 +130,6 @@ public class CreateOrUpdateUserFragment extends Fragment {
             inputUserCpf.setText(this.userResponseDTO.getCpf());
             inputUserPhone.setText(this.userResponseDTO.getPhone());
 
-            System.out.println(this.userResponseDTO.isAdmin());
             if (this.userResponseDTO.isAdmin()) {
                 inputUserIsAdmin.setSelection(adapter.getPosition("Sim"));
             } else {

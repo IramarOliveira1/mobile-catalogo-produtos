@@ -17,9 +17,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +35,12 @@ import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.FilterCategoryAdapter;
 import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
+import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.services.ProductService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +55,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<ProductResponseDTO> itemList;
     private List<Category> itemListCategory;
     private TextView categoryEmpty;
+    private List<CategoryResponseDTO> categoriesList;
+    private List<CategoryResponseDTO> categories;
 
     public ProductFragment() {
     }
@@ -67,6 +73,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         productService = new ApiClient().getClient(getActivity()).create(ProductService.class);
 
         itemList = new ArrayList<>();
+
+        categories = new ArrayList<>();
 
         itemListCategory = new ArrayList<>();
 
@@ -106,6 +114,33 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         createOrUpdate(view);
     }
 
+    public void getCategory() {
+
+        CategoryService categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
+        categoryService.all().enqueue(new Callback<List<CategoryResponseDTO>>() {
+            @Override
+            public void onResponse(Call<List<CategoryResponseDTO>> call, Response<List<CategoryResponseDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    categoriesList = response.body();
+
+                    CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+
+                    categoryResponseDTO.setId(0L);
+                    categoryResponseDTO.setName("Selecione");
+                    categories.add(categoryResponseDTO);
+                    categories.addAll(categoriesList);
+                }
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<CategoryResponseDTO>> call, @NonNull Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
     public void recyclerViewFilterCategory(View view) {
         RecyclerView categoryFilterRecyclerView = view.findViewById(R.id.recyclerViewFilterCategory);
 
@@ -132,6 +167,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
                 itemListCategory.add(category);
                 itemListCategory.addAll(response.body().getCategories());
                 filterCategoryAdapter.notifyDataSetChanged();
+
+                getCategory();
 
                 progressBar.setVisibility(View.GONE);
             }
@@ -167,21 +204,15 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         });
     }
 
-
     public void createOrUpdate(View view) {
         Button buttonTextView = view.findViewById(R.id.createProduct);
         buttonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frameLayout, new CreateOrUpdateProductFragment())
-                        .addToBackStack(null)
-                        .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CreateOrUpdateProductFragment(null, false, categories)).addToBackStack(null).commit();
             }
         });
     }
-
 
     public void delete(Long id, int position) {
         productService.delete(id).enqueue(new Callback<MessageResponse>() {
@@ -211,6 +242,23 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         });
     }
 
+    public void index(Long id) {
+        productService.index(id).enqueue(new Callback<ProductResponseDTO>() {
+            @Override
+            public void onResponse(Call<ProductResponseDTO> call, Response<ProductResponseDTO> response) {
+                if (response.isSuccessful()) {
+
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CreateOrUpdateProductFragment(response.body(), true, categories)).addToBackStack(null).commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponseDTO> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void confirmDelete(Long id, int position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -234,6 +282,9 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
     @Override
     public void onUpdateItem(int position) {
+        ProductResponseDTO item = itemList.get(position);
+
+        this.index(item.getId());
     }
 
     @Override

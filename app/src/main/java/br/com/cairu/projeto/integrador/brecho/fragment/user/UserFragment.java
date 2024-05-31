@@ -148,7 +148,6 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
                 if (response.isSuccessful()) {
                     UserResponseDTO userResponseDTO = response.body();
 
-                    System.out.println(userResponseDTO);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frameLayout, new CreateOrUpdateUserFragment(userResponseDTO, true))
                             .addToBackStack(null)

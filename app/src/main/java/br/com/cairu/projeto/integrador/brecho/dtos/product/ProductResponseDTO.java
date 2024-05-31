@@ -3,6 +3,7 @@ package br.com.cairu.projeto.integrador.brecho.dtos.product;
 import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.models.Category;
 import br.com.cairu.projeto.integrador.brecho.models.File;
 
 public class ProductResponseDTO {
@@ -12,7 +13,7 @@ public class ProductResponseDTO {
     private String description;
     private String price;
     private boolean isActive;
-    private CategoryResponseDTO categoryResponseDTO;
+    private Category category;
     private ArrayList<File> files;
 
     public Long getId() {
@@ -55,19 +56,19 @@ public class ProductResponseDTO {
         isActive = active;
     }
 
-    public CategoryResponseDTO getCategoryResponseDTO() {
-        return categoryResponseDTO;
-    }
-
-    public void setCategoryResponseDTO(CategoryResponseDTO categoryResponseDTO) {
-        this.categoryResponseDTO = categoryResponseDTO;
-    }
-
     public ArrayList<File> getFiles() {
         return files;
     }
 
     public void setFiles(ArrayList<File> files) {
         this.files = files;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

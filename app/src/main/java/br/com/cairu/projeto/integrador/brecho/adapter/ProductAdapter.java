@@ -111,7 +111,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             btnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemDelete(getAdapterPosition());
+                    listener.onUpdateItem(getAdapterPosition());
                 }
             });
             btnDelete.setOnClickListener(new View.OnClickListener() {
