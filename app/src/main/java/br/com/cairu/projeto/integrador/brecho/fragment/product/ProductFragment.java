@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -53,10 +54,9 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private ProductService productService;
     private ProgressBar progressBar;
     private List<ProductResponseDTO> itemList;
-    private List<Category> itemListCategory;
-    private TextView categoryEmpty;
-    private List<CategoryResponseDTO> categoriesList;
+    private List<CategoryResponseDTO> itemListCategory;
     private List<CategoryResponseDTO> categories;
+    private TextView categoryEmpty;
 
     public ProductFragment() {
     }
@@ -88,7 +88,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        productAdapter = new ProductAdapter(itemList, this);
+        productAdapter = new ProductAdapter(itemList, this, false);
         productRecyclerView.setAdapter(productAdapter);
 
         EditText searchProduct = view.findViewById(R.id.searchProductList);
@@ -113,34 +113,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         recyclerViewFilterCategory(view);
         createOrUpdate(view);
     }
-
-    public void getCategory() {
-
-        CategoryService categoryService = new ApiClient().getClient(getActivity()).create(CategoryService.class);
-        categoryService.all().enqueue(new Callback<List<CategoryResponseDTO>>() {
-            @Override
-            public void onResponse(Call<List<CategoryResponseDTO>> call, Response<List<CategoryResponseDTO>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    categoriesList = response.body();
-
-                    CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
-
-                    categoryResponseDTO.setId(0L);
-                    categoryResponseDTO.setName("Selecione");
-                    categories.add(categoryResponseDTO);
-                    categories.addAll(categoriesList);
-                }
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<CategoryResponseDTO>> call, @NonNull Throwable throwable) {
-                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
     public void recyclerViewFilterCategory(View view) {
         RecyclerView categoryFilterRecyclerView = view.findViewById(R.id.recyclerViewFilterCategory);
 
@@ -162,13 +134,18 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
                 productAdapter.notifyDataSetChanged();
 
                 itemListCategory.clear();
-                Category category = new Category();
+                CategoryResponseDTO category = new CategoryResponseDTO();
                 category.setName("Todos");
                 itemListCategory.add(category);
                 itemListCategory.addAll(response.body().getCategories());
                 filterCategoryAdapter.notifyDataSetChanged();
 
-                getCategory();
+                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+
+                categoryResponseDTO.setId(0L);
+                categoryResponseDTO.setName("Selecione");
+                categories.add(categoryResponseDTO);
+                categories.addAll(response.body().getCategories());
 
                 progressBar.setVisibility(View.GONE);
             }
@@ -243,7 +220,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     }
 
     public void index(Long id) {
-        productService.index(id).enqueue(new Callback<ProductResponseDTO>() {
+        productService.index(id, "").enqueue(new Callback<ProductResponseDTO>() {
             @Override
             public void onResponse(Call<ProductResponseDTO> call, Response<ProductResponseDTO> response) {
                 if (response.isSuccessful()) {

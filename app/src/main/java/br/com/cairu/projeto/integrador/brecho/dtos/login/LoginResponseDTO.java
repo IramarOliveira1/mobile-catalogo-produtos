@@ -1,12 +1,22 @@
 package br.com.cairu.projeto.integrador.brecho.dtos.login;
 
 public class LoginResponseDTO {
+    private Long id;
 
     private String name;
 
     private boolean isAdmin;
 
     private String token;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getName() {
         return name;

@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".fragment.login.LoginFragment">
 
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
@@ -41,10 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"
             android:indeterminate="true"
             android:indeterminateDrawable="@drawable/bg_progress_bar"
-            android:progress="0" />
+            android:progress="0"
+            android:visibility="gone" />
 
 
         <TextView
@@ -92,10 +93,17 @@
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/bg_btn_login"
             android:text="CONTINUAR" />
 
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_btn_login"
+            android:text="Voltar" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

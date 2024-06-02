@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,10 +37,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private final List<ProductResponseDTO> listName;
     private final OnItemDeleteListener listener;
 
-    public ProductAdapter(List<ProductResponseDTO> list, OnItemDeleteListener listener) {
+    private final boolean catalog;
+
+    public ProductAdapter(List<ProductResponseDTO> list, OnItemDeleteListener listener, boolean catalog) {
         this.list = list;
         this.listener = listener;
         this.listName = new ArrayList<>(list);
+        this.catalog = catalog;
     }
 
     @NonNull
@@ -95,6 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public TextView name;
         public TextView price;
+        public TextView description;
         public Button btnDelete;
         public Button btnUpdate;
         public ImageView images;
@@ -107,6 +112,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             btnDelete = itemView.findViewById(R.id.btnDeleteProduct);
             btnUpdate = itemView.findViewById(R.id.btnUpdateProduct);
             images = itemView.findViewById(R.id.imageProduct);
+            LinearLayout recyclerViewClick = itemView.findViewById(R.id.recyclerViewClick);
+
+            if (catalog) {
+                btnDelete.setVisibility(View.GONE);
+                btnUpdate.setVisibility(View.GONE);
+
+                recyclerViewClick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onUpdateItem(getAdapterPosition());
+                    }
+                });
+            } else {
+                btnDelete.setVisibility(View.VISIBLE);
+                btnUpdate.setVisibility(View.VISIBLE);
+            }
 
             btnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override

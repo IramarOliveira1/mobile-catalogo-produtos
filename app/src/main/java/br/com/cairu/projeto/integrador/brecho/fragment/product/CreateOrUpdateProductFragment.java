@@ -1,5 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.product;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
@@ -47,7 +49,6 @@ import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.fragment.user.UserFragment;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
 import br.com.cairu.projeto.integrador.brecho.models.File;
 import br.com.cairu.projeto.integrador.brecho.services.ProductService;
@@ -95,19 +96,14 @@ public class CreateOrUpdateProductFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_create_or_update_product, container, false);
 
         inputCategoryProduct = view.findViewById(R.id.inputCategoryProduct);
         inputProductIsActive = view.findViewById(R.id.inputProductIsActive);
 
-        adapterIsActive = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.trueOrFalse,
-                android.R.layout.simple_spinner_item
-        );
+        adapterIsActive = ArrayAdapter.createFromResource(requireContext(), R.array.trueOrFalse, android.R.layout.simple_spinner_item);
         adapterIsActive.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         inputProductIsActive.setAdapter(adapterIsActive);
 
@@ -163,7 +159,7 @@ public class CreateOrUpdateProductFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(), false);
 
         productService = new ApiClient().getClient(getActivity()).create(ProductService.class);
 
@@ -191,11 +187,7 @@ public class CreateOrUpdateProductFragment extends Fragment {
             description.setText(this.productResponseDTO.getDescription());
             price.setText(this.productResponseDTO.getPrice());
 
-            inputCategoryProduct.setSelection(adapterCategory.getPosition(
-                    new CategoryResponseDTO(
-                            this.productResponseDTO.getCategory().getId(),
-                            this.productResponseDTO.getCategory().getName()
-                    )));
+            inputCategoryProduct.setSelection(adapterCategory.getPosition(new CategoryResponseDTO(this.productResponseDTO.getCategory().getId(), this.productResponseDTO.getCategory().getName())));
 
             if (this.productResponseDTO.isActive()) {
                 inputProductIsActive.setSelection(adapterIsActive.getPosition("Sim"));
@@ -281,14 +273,11 @@ public class CreateOrUpdateProductFragment extends Fragment {
         pickImagesLauncher.launch(intent);
     }
 
-    private final ActivityResultLauncher<Intent> pickImagesLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
-                    handleImageSelection(result.getData());
-                }
-            }
-    );
+    private final ActivityResultLauncher<Intent> pickImagesLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
+            handleImageSelection(result.getData());
+        }
+    });
 
     public void handleImageSelection(Intent intent) {
         if (intent.getClipData() != null) {
@@ -432,16 +421,13 @@ public class CreateOrUpdateProductFragment extends Fragment {
 
         productService.register(productRequestDTO, parts).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 
                     Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, new ProductFragment())
-                            .addToBackStack(null)
-                            .commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
                 } else {
                     try {
                         MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
@@ -464,7 +450,29 @@ public class CreateOrUpdateProductFragment extends Fragment {
         });
     }
 
-    public void update()  {
+
+//    public String downloadImageNew(String filename, String downloadUrlOfImage) {
+//        try {
+//            DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+//            Uri downloadUri = Uri.parse(downloadUrlOfImage);
+//            DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+//            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+//                    .setAllowedOverRoaming(false)
+//                    .setTitle(filename)
+//                    .setMimeType("image/png") // Your file type. You can use this code to download other file types also.
+//                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+//                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, java.io.File.separator + filename + ".png");
+//            dm.enqueue(request);
+//
+//            System.out.println(downloadUri);
+//
+//            return getRealPathFromUri(requireContext(), downloadUri);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e.getMessage());
+//        }
+//    }
+
+    public void update() {
         ProductRequestDTO productRequestDTO = new ProductRequestDTO();
         Category category = new Category();
 
@@ -477,24 +485,29 @@ public class CreateOrUpdateProductFragment extends Fragment {
 
         ArrayList<MultipartBody.Part> parts = new ArrayList<>();
         for (Uri uri : imageUris) {
-            parts.add(prepareFilePart(requireContext(), "images", uri, getRealPathFromUri(requireContext(), uri)));
+            if (Objects.requireNonNull(uri.getPath()).contains("/public")) {
+
+
+//                String teste = downloadImageNew("TESTANDO", uri.toString());
+//                System.out.println(teste);
+//                parts.add(part);
+            } else {
+                parts.add(prepareFilePart(requireContext(), "images", uri, getRealPathFromUri(requireContext(), uri)));
+            }
         }
+
         productService.update(this.productResponseDTO.getId(), productRequestDTO, parts).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 
                     Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, new UserFragment())
-                            .addToBackStack(null)
-                            .commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
                 } else {
                     try {
                         MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
-                        System.out.println("ERROR " + messageResponse.getMessage());
                         Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         throw new RuntimeException(e);

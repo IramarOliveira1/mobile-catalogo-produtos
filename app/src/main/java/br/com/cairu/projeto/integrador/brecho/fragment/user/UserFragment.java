@@ -29,7 +29,6 @@ import br.com.cairu.projeto.integrador.brecho.adapter.UserAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.fragment.category.CreateOrUpdateCategoryFragment;
 import br.com.cairu.projeto.integrador.brecho.services.UserService;
 import retrofit2.Call;
 import retrofit2.Callback;

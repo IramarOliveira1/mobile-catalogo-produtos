@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
 
 public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAdapter.ViewHolder> {
@@ -21,11 +22,11 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
         void onItemClick(String category, int position, Long id);
     }
 
-    private final List<Category> categoryList;
+    private final List<CategoryResponseDTO> categoryList;
     private final onItemClickListener listener;
     private int selectedPosition = 0;
 
-    public FilterCategoryAdapter(List<Category> list, onItemClickListener deleteListener) {
+    public FilterCategoryAdapter(List<CategoryResponseDTO> list, onItemClickListener deleteListener) {
         this.categoryList = list;
         this.listener = deleteListener;
     }
@@ -40,7 +41,7 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Category category = categoryList.get(position);
+        CategoryResponseDTO category = categoryList.get(position);
 
         holder.categoryName.setText(category.getName().toUpperCase());
 

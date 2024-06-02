@@ -19,6 +19,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ProductService {
 
@@ -40,5 +41,5 @@ public interface ProductService {
     Call<MessageResponse> update(@Path("id") Long id, @Part("data") ProductRequestDTO data, @Part ArrayList<MultipartBody.Part> images);
 
     @GET("/product/{id}")
-    Call<ProductResponseDTO> index(@Path("id") Long id);
+    Call<ProductResponseDTO> index(@Path("id") Long id, @Query("detail") String detail);
 }

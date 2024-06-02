@@ -21,6 +21,7 @@ public class Generic {
     private final SharedPreferences sharedPreferences;
     private static final String TOKEN_KEY = "jwt_token";
     private static final String USERNAME_KEY = "userName";
+    private static final String USERID_KEY = "userId";
 
     public Generic(Context context) {
         sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
@@ -50,6 +51,16 @@ public class Generic {
 
     public String getUsername() {
         return sharedPreferences.getString(USERNAME_KEY, null);
+    }
+
+    public void setUserId(Long id) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(USERID_KEY, id);
+        editor.apply();
+    }
+
+    public Long getUserId() {
+        return sharedPreferences.getLong(USERID_KEY, 0L);
     }
 
     public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts, @Nullable ArrayList<CurrencyEditText> currencyEditTexts) {

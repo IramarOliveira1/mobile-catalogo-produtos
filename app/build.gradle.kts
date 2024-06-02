@@ -56,4 +56,6 @@ dependencies {
     implementation(libs.maskara)
     implementation(libs.mask)
 
+    //carousel
+    implementation(libs.carousel)
 }

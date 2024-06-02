@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
+import br.com.cairu.projeto.integrador.brecho.models.File;
 
 public class ProductRequestDTO {
     private String name;

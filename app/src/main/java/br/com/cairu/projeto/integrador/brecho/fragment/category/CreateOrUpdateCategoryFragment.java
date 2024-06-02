@@ -67,7 +67,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(),false);
 
         saveCategory = view.findViewById(R.id.btnSaveCategory);
         inputCategoryName = view.findViewById(R.id.inputCategoryName);

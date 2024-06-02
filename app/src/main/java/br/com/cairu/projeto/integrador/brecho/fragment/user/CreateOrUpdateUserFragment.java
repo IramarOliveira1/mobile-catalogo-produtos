@@ -26,6 +26,7 @@ import com.santalu.maskara.widget.MaskEditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
@@ -108,10 +109,6 @@ public class CreateOrUpdateUserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
 
         userService = new ApiClient().getClient(getActivity()).create(UserService.class);
 
@@ -237,6 +234,11 @@ public class CreateOrUpdateUserFragment extends Fragment {
         userRequestDTO.setAdmin(isAdmin);
         userRequestDTO.setPassword(inputUserPassword.getText().toString());
         userRequestDTO.setPhone(inputUserPhone.getText().toString());
+
+        if (Objects.equals(this.userResponseDTO.getId(), generic.getUserId())) {
+            generic.saveUsername(inputUserName.getText().toString());
+        }
+
         userService.update(this.userResponseDTO.getId(), userRequestDTO).enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {

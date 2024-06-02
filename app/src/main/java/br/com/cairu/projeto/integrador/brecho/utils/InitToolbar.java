@@ -16,14 +16,14 @@ import br.com.cairu.projeto.integrador.brecho.R;
 
 public class InitToolbar {
 
-    public void toolbar(AppCompatActivity activity, Toolbar toolbar, FragmentActivity fragmentActivity) {
+    public void toolbar(AppCompatActivity activity, Toolbar toolbar, FragmentActivity fragmentActivity, boolean catalog) {
 
         activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setTitle("");
 
-        if (activity.getSupportActionBar() != null) {
+        if (activity.getSupportActionBar() != null && !catalog) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            activity.getSupportActionBar().setTitle("");
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24);
         }
 
