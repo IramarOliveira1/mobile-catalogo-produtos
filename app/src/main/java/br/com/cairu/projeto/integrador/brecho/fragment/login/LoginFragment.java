@@ -75,7 +75,7 @@ public class LoginFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeFrament(new CatalogFragment());
+                changeFrament(new CatalogFragment(), false);
             }
         });
 
@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment {
         Call<LoginResponseDTO> call = loginService.login(loginRequest);
         call.enqueue(new Callback<LoginResponseDTO>() {
             @Override
-            public void onResponse(Call<LoginResponseDTO> call, Response<LoginResponseDTO> response) {
+            public void onResponse(@NonNull Call<LoginResponseDTO> call, @NonNull Response<LoginResponseDTO> response) {
                 if (response.isSuccessful()) {
                     LoginResponseDTO loginResponseDTO = response.body();
 
@@ -124,7 +124,7 @@ public class LoginFragment extends Fragment {
                         menuItem.setVisible(false);
                     }
 
-                    changeFrament(new HomeFragment());
+                    changeFrament(new HomeFragment(), true);
                 } else {
                     try {
                         MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
@@ -146,12 +146,15 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void changeFrament(Fragment fragment) {
+    public void changeFrament(Fragment fragment, boolean home) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameLayout, fragment)
                 .addToBackStack(null)
                 .commit();
 
-        bottomNavigationView.setVisibility(View.VISIBLE);
+        if (home) {
+            bottomNavigationView.setSelectedItemId(R.id.home);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 }

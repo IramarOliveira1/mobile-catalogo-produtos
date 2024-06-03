@@ -47,7 +47,7 @@ public class FilterCategoryAdapter extends RecyclerView.Adapter<FilterCategoryAd
 
         if (position == selectedPosition) {
             holder.categoryName.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.bg_btn_delete));
-            holder.categoryName.setTextColor(Color.WHITE);
+            holder.categoryName.setTextColor(Color.parseColor("#FAEDD4"));
         } else {
             holder.categoryName.setBackgroundColor(Color.TRANSPARENT);
             holder.categoryName.setTextColor(Color.parseColor("#888888"));

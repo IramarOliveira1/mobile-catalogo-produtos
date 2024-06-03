@@ -30,13 +30,17 @@ import br.com.cairu.projeto.integrador.brecho.adapter.CategoryAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
 public class CategoryFragment extends Fragment implements CategoryAdapter.OnItemDeleteListener {
+
+    private Generic generic;
 
     private ProgressBar progressBar;
 
@@ -56,6 +60,8 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
 
         RecyclerView recyclerView = view.findViewById(R.id.recycleViewCategory);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        generic = new Generic(requireContext());
 
         itemList = new ArrayList<>();
 
@@ -82,12 +88,26 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
         categoryService.all().enqueue(new Callback<List<CategoryResponseDTO>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<CategoryResponseDTO>> call, Response<List<CategoryResponseDTO>> response) {
-                List<CategoryResponseDTO> categoryResponseDTO = response.body();
-                itemList.clear();
-                itemList.addAll(response.body());
-                categoryAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+            public void onResponse(@NonNull Call<List<CategoryResponseDTO>> call, @NonNull Response<List<CategoryResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<CategoryResponseDTO> categoryResponseDTO = response.body();
+                    itemList.clear();
+                    itemList.addAll(response.body());
+                    categoryAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (response.code() == 403) {
+                    generic.clear();
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
             }
 
             @Override

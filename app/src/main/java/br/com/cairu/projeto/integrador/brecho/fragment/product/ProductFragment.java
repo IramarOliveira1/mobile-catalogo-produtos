@@ -40,15 +40,17 @@ import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.services.ProductService;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductFragment extends Fragment implements ProductAdapter.OnItemDeleteListener, FilterCategoryAdapter.onItemClickListener {
-
+    private Generic generic;
     private ProductAdapter productAdapter;
     private FilterCategoryAdapter filterCategoryAdapter;
     private ProductService productService;
@@ -71,6 +73,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         super.onViewCreated(view, savedInstanceState);
 
         productService = new ApiClient().getClient(getActivity()).create(ProductService.class);
+
+        generic = new Generic(requireActivity());
 
         itemList = new ArrayList<>();
 
@@ -113,6 +117,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         recyclerViewFilterCategory(view);
         createOrUpdate(view);
     }
+
     public void recyclerViewFilterCategory(View view) {
         RecyclerView categoryFilterRecyclerView = view.findViewById(R.id.recyclerViewFilterCategory);
 
@@ -127,27 +132,40 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         productService.all().enqueue(new Callback<ProductAndCategory>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<ProductAndCategory> call, Response<ProductAndCategory> response) {
+            public void onResponse(@NonNull Call<ProductAndCategory> call, @NonNull Response<ProductAndCategory> response) {
+                if (response.isSuccessful()) {
+                    itemList.clear();
+                    itemList.addAll(response.body().getProducts());
+                    productAdapter.notifyDataSetChanged();
 
-                itemList.clear();
-                itemList.addAll(response.body().getProducts());
-                productAdapter.notifyDataSetChanged();
+                    itemListCategory.clear();
+                    CategoryResponseDTO category = new CategoryResponseDTO();
+                    category.setName("Todos");
+                    itemListCategory.add(category);
+                    itemListCategory.addAll(response.body().getCategories());
+                    filterCategoryAdapter.notifyDataSetChanged();
 
-                itemListCategory.clear();
-                CategoryResponseDTO category = new CategoryResponseDTO();
-                category.setName("Todos");
-                itemListCategory.add(category);
-                itemListCategory.addAll(response.body().getCategories());
-                filterCategoryAdapter.notifyDataSetChanged();
+                    CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
 
-                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+                    categoryResponseDTO.setId(0L);
+                    categoryResponseDTO.setName("Selecione");
+                    categories.add(categoryResponseDTO);
+                    categories.addAll(response.body().getCategories());
 
-                categoryResponseDTO.setId(0L);
-                categoryResponseDTO.setName("Selecione");
-                categories.add(categoryResponseDTO);
-                categories.addAll(response.body().getCategories());
+                    progressBar.setVisibility(View.GONE);
+                }
 
-                progressBar.setVisibility(View.GONE);
+                if (response.code() == 403) {
+                    generic.clear();
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
             }
 
             @Override

@@ -1,6 +1,8 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.home;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -36,17 +38,10 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private BottomNavigationView bottomNavigationView;
-
     private TextView buttonTextView;
-
-    private TextView logout;
-
     private Generic generic;
-
     private ProgressBar progressBar;
-
     private RecyclerView recyclerView;
-
     private HomeAdapter homeAdapter;
 
     public HomeFragment() {
@@ -98,9 +93,10 @@ public class HomeFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
 
         progressBar.setVisibility(View.VISIBLE);
+
         this.all(view);
 
-        logout = view.findViewById(R.id.logout);
+        TextView logout = view.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,8 +110,9 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    @SuppressLint("SetTextI18n")
     public void all(View view) {
-        generic = new Generic(getActivity());
+        generic = new Generic(requireActivity());
 
         TextView username = view.findViewById(R.id.userHome);
         username.setText("OLÁ, " + generic.getUsername().toUpperCase());
@@ -127,20 +124,35 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycleViewHome);
         call.enqueue(new Callback<List<HomeResponseDTO>>() {
             @Override
-            public void onResponse(Call<List<HomeResponseDTO>> call, Response<List<HomeResponseDTO>> response) {
-                List<HomeResponseDTO> homeResponseDTO = response.body();
+            public void onResponse(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Response<List<HomeResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<HomeResponseDTO> homeResponseDTO = response.body();
 
-                homeAdapter = new HomeAdapter(homeResponseDTO);
+                    homeAdapter = new HomeAdapter(homeResponseDTO);
 
-                recyclerView.setAdapter(homeAdapter);
+                    recyclerView.setAdapter(homeAdapter);
 
-                TextView totalProduct = view.findViewById(R.id.quantityProduct);
-                totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
+                    TextView totalProduct = view.findViewById(R.id.quantityProduct);
+                    totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
 
-                TextView totalCategory = view.findViewById(R.id.quantityCategory);
-                totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
+                    TextView totalCategory = view.findViewById(R.id.quantityCategory);
+                    totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
 
-                progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (response.code() == 403) {
+                    generic.clear();
+
+                    if (getActivity() != null) {
+                        Toast.makeText(view.getContext(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
             }
 
             @Override

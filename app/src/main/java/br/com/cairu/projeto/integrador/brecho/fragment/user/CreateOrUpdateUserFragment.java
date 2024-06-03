@@ -112,6 +112,10 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         userService = new ApiClient().getClient(getActivity()).create(UserService.class);
 
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(),false);
+
         saveUser = view.findViewById(R.id.btnSaveUser);
         inputUserName = view.findViewById(R.id.inputUserName);
         inputUserEmail = view.findViewById(R.id.inputUserEmail);

@@ -1,5 +1,9 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.catalog;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,13 +15,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -40,8 +47,6 @@ import br.com.cairu.projeto.integrador.brecho.utils.InitToolbar;
 public class DetailFragment extends Fragment {
 
     private ProductResponseDTO productResponseDTO;
-
-    private TextView name, price, description;
 
     public DetailFragment() {
     }
@@ -75,18 +80,60 @@ public class DetailFragment extends Fragment {
         ImageSlider imageSlider = view.findViewById(R.id.image_slider);
         imageSlider.setImageList(images);
 
-        name = view.findViewById(R.id.nameDetail);
+        TextView name = view.findViewById(R.id.nameDetail);
         name.setText(productResponseDTO.getName().toUpperCase());
 
         Locale locale = new Locale("pt", "BR");
 
         String convertMoney = NumberFormat.getCurrencyInstance(locale).format(Double.parseDouble(productResponseDTO.getPrice()));
 
-        price = view.findViewById(R.id.priceDetail);
+        TextView price = view.findViewById(R.id.priceDetail);
         price.setText(convertMoney);
 
-        description = view.findViewById(R.id.descriptionDetail);
+        TextView description = view.findViewById(R.id.descriptionDetail);
         description.setText(productResponseDTO.getDescription());
+
+
+        Button buttonWhatsApp = view.findViewById(R.id.buttonWhatsApp);
+
+        buttonWhatsApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWhatsAppWithMessage(productResponseDTO.getName());
+            }
+        });
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private void openWhatsAppWithMessage(String message) {
+        PackageManager packageManager = requireActivity().getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        try {
+            String url = "https://api.whatsapp.com/send?phone=5571991106181&text=Olá gostaria de mais informações sobre essa roupa -" + Uri.encode(message);
+            intent.setPackage("com.whatsapp");
+            intent.setData(Uri.parse(url));
+
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(getActivity(), "WhatsApp não está instalado. você será direcionado para playstore", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.whatsapp"));
+                        if (playStoreIntent.resolveActivity(packageManager) != null) {
+                            startActivity(playStoreIntent);
+                        } else {
+                            playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.whatsapp"));
+                            startActivity(playStoreIntent);
+                        }
+                    }
+                }, 2000);
+            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Ocorreu um erro.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

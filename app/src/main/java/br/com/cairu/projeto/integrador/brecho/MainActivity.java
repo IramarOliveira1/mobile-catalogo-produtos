@@ -20,11 +20,13 @@ import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.product.ProductFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.user.UserFragment;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 
 public class MainActivity extends AppCompatActivity {
 
     public BottomNavigationView bottomNavigationView;
     public FrameLayout frameLayout;
+    public Generic generic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,22 +34,24 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        generic = new Generic(getApplicationContext());
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         frameLayout = findViewById(R.id.frameLayout);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener(){
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId = menuItem.getItemId();
 
-                if (itemId == R.id.home){
+                if (itemId == R.id.home) {
                     loadFragment(new HomeFragment(), false);
-                } else if (itemId == R.id.product){
+                } else if (itemId == R.id.product) {
                     loadFragment(new ProductFragment(), false);
-                } else if (itemId == R.id.category){
+                } else if (itemId == R.id.category) {
                     loadFragment(new CategoryFragment(), false);
-                } else if(itemId == R.id.catalog) {
+                } else if (itemId == R.id.catalog) {
                     loadFragment(new CatalogFragment(), false);
                 } else {
                     loadFragment(new UserFragment(), false);
@@ -57,14 +61,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        loadFragment(new UserFragment(), true);
+        if (generic.getToken() != null) {
+            loadFragment(new HomeFragment(), true);
+        } else {
+            loadFragment(new CatalogFragment(), true);
+        }
     }
 
     public void loadFragment(Fragment fragment, boolean isAppInitialized) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (isAppInitialized){
+        if (isAppInitialized) {
             fragmentTransaction.add(R.id.frameLayout, fragment);
         } else {
             fragmentTransaction.replace(R.id.frameLayout, fragment);

@@ -64,6 +64,8 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     private TextView categoryEmpty;
     private Generic generic;
 
+    private EditText search;
+
     public CatalogFragment() {
     }
 
@@ -93,6 +95,8 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
         itemListCategory = new ArrayList<>();
 
         categoryEmpty = view.findViewById(R.id.notfoundCategoryProduct);
+
+        search = view.findViewById(R.id.searchProductCatalog);
 
         RecyclerView productRecyclerView = view.findViewById(R.id.recyclerViewProductCatalog);
 
@@ -259,6 +263,8 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
             @Override
             public void onResponse(Call<ProductResponseDTO> call, Response<ProductResponseDTO> response) {
                 if (response.isSuccessful()) {
+                    search.setText("");
+
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new DetailFragment(response.body())).addToBackStack(null).commit();
                 }
             }

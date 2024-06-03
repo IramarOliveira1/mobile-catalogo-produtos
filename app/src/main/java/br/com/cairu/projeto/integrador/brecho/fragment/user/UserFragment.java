@@ -29,7 +29,9 @@ import br.com.cairu.projeto.integrador.brecho.adapter.UserAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.services.UserService;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,11 +40,9 @@ import retrofit2.Response;
 public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteListener {
 
     private ProgressBar progressBar;
-
     private UserAdapter userAdapter;
-
     private UserService userService;
-
+    private Generic generic;
     private List<UserResponseDTO> itemList;
 
     public UserFragment() {
@@ -54,6 +54,8 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
 
         RecyclerView recyclerView = view.findViewById(R.id.recycleViewUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        generic = new Generic(requireContext());
 
         itemList = new ArrayList<>();
 
@@ -80,12 +82,27 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
         userService.all().enqueue(new Callback<List<UserResponseDTO>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<UserResponseDTO>> call, Response<List<UserResponseDTO>> response) {
-                List<UserResponseDTO> userResponseDTO = response.body();
-                itemList.clear();
-                itemList.addAll(response.body());
-                userAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+            public void onResponse(@NonNull Call<List<UserResponseDTO>> call, @NonNull Response<List<UserResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<UserResponseDTO> userResponseDTO = response.body();
+                    itemList.clear();
+                    itemList.addAll(response.body());
+                    userAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (response.code() == 403) {
+                    generic.clear();
+
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
             }
 
             @Override
