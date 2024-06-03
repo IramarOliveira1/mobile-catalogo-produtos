@@ -13,6 +13,7 @@ okhttp-bom = "4.12.0"
 picasso = "2.8"
 mask = "2.0.2"
 carousel =  "0.1.2"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -42,7 +43,8 @@ mask = { module = "com.github.BlacKCaT27:CurrencyEditText", version.ref = "mask"
 #carousel
 carousel = { module = " com.github.denzcoskun:ImageSlideshow", version.ref = "carousel" }
 
-
+#swiperefreshlayout
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

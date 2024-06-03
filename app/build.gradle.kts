@@ -58,4 +58,7 @@ dependencies {
 
     //carousel
     implementation(libs.carousel)
+
+    //swiperefreshlayout
+    implementation(libs.swiperefreshlayout)
 }

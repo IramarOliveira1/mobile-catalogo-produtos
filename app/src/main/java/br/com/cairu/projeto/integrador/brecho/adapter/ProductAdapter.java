@@ -99,7 +99,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         public TextView name;
         public TextView price;
-        public TextView description;
         public Button btnDelete;
         public Button btnUpdate;
         public ImageView images;

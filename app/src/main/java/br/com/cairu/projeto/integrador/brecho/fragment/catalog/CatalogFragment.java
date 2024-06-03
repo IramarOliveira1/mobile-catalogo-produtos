@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,7 +43,6 @@ import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.fragment.category.CategoryFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
-import br.com.cairu.projeto.integrador.brecho.fragment.product.CreateOrUpdateProductFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.product.ProductFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.user.UserFragment;
 import br.com.cairu.projeto.integrador.brecho.services.ProductService;
@@ -62,6 +61,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<CategoryResponseDTO> itemListCategory;
     private List<CategoryResponseDTO> categories;
     private TextView categoryEmpty;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Generic generic;
 
     private EditText search;
@@ -76,6 +76,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
         return inflater.inflate(R.layout.fragment_catalog, container, false);
     }
 
+    @SuppressLint("CutPasteId")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -93,6 +94,8 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
         categories = new ArrayList<>();
 
         itemListCategory = new ArrayList<>();
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
 
         categoryEmpty = view.findViewById(R.id.notfoundCategoryProduct);
 
@@ -132,6 +135,13 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                all();
             }
         });
 
@@ -225,12 +235,14 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
                 categories.addAll(response.body().getCategories());
 
                 progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<ProductAndCategory> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
