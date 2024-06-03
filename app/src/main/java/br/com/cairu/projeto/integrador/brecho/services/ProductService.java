@@ -10,6 +10,7 @@ import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.models.File;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -38,7 +39,7 @@ public interface ProductService {
 
     @Multipart
     @PUT("/product/{id}")
-    Call<MessageResponse> update(@Path("id") Long id, @Part("data") ProductRequestDTO data, @Part ArrayList<MultipartBody.Part> images);
+    Call<MessageResponse> update(@Path("id") Long id, @Part("data") ProductRequestDTO data, @Part ArrayList<MultipartBody.Part> images, @Part("urls") List<File> urls);
 
     @GET("/product/{id}")
     Call<ProductResponseDTO> index(@Path("id") Long id, @Query("detail") String detail);

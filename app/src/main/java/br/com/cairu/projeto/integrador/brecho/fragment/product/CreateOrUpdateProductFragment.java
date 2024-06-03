@@ -475,6 +475,7 @@ public class CreateOrUpdateProductFragment extends Fragment {
     public void update() {
         ProductRequestDTO productRequestDTO = new ProductRequestDTO();
         Category category = new Category();
+        File file = new File();
 
         productRequestDTO.setName(name.getText().toString());
         productRequestDTO.setDescription(description.getText().toString());
@@ -484,47 +485,47 @@ public class CreateOrUpdateProductFragment extends Fragment {
         productRequestDTO.setCategory(category);
 
         ArrayList<MultipartBody.Part> parts = new ArrayList<>();
+        List<File> urls = new ArrayList<>();
         for (Uri uri : imageUris) {
             if (Objects.requireNonNull(uri.getPath()).contains("/public")) {
-
-
-//                String teste = downloadImageNew("TESTANDO", uri.toString());
-//                System.out.println(teste);
-//                parts.add(part);
+                file.setUrl(uri.getPath().substring(1));
+                urls.add(file);
             } else {
                 parts.add(prepareFilePart(requireContext(), "images", uri, getRealPathFromUri(requireContext(), uri)));
             }
         }
 
-        productService.update(this.productResponseDTO.getId(), productRequestDTO, parts).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
-                if (response.isSuccessful()) {
-                    MessageResponse messageResponse = response.body();
+        System.out.println(urls.size());
 
-                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
-                } else {
-                    try {
-                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
-                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                progressBar.setVisibility(View.GONE);
-                saveProduct.setEnabled(true);
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
-                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                saveProduct.setEnabled(true);
-            }
-        });
+//        productService.update(this.productResponseDTO.getId(), productRequestDTO, parts, urls).enqueue(new Callback<MessageResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
+//                if (response.isSuccessful()) {
+//                    MessageResponse messageResponse = response.body();
+//
+//                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
+//                } else {
+//                    try {
+//                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+//                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//                progressBar.setVisibility(View.GONE);
+//                saveProduct.setEnabled(true);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+//                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+//                progressBar.setVisibility(View.GONE);
+//                saveProduct.setEnabled(true);
+//            }
+//        });
     }
 }
 
