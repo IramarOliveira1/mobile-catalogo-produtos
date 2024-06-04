@@ -22,10 +22,10 @@ import retrofit2.http.Query;
 public interface ProductService {
 
     @GET("/product/all")
-    Call<ProductAndCategory> all();
+    Call<ProductAndCategory> all(@Query("catalog") String catalog);
 
     @GET("/product/category/{id}")
-    Call<List<ProductResponseDTO>> filterPerCategory(@Path("id") Long id);
+    Call<List<ProductResponseDTO>> filterPerCategory(@Path("id") Long id, @Query("catalog") String catalog);
 
     @DELETE("/product/{id}")
     Call<MessageResponse> delete(@Path("id") Long id);

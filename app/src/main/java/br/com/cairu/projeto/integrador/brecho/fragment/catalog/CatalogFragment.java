@@ -211,10 +211,10 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     }
 
     public void all() {
-        productService.all().enqueue(new Callback<ProductAndCategory>() {
+        productService.all("catalog").enqueue(new Callback<ProductAndCategory>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<ProductAndCategory> call, Response<ProductAndCategory> response) {
+            public void onResponse(@NonNull Call<ProductAndCategory> call, @NonNull Response<ProductAndCategory> response) {
 
                 itemList.clear();
                 itemList.addAll(response.body().getProducts());
@@ -248,7 +248,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     }
 
     public void filterCategory(Long id) {
-        productService.filterPerCategory(id).enqueue(new Callback<List<ProductResponseDTO>>() {
+        productService.filterPerCategory(id, "catalog").enqueue(new Callback<List<ProductResponseDTO>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<ProductResponseDTO>> call, Response<List<ProductResponseDTO>> response) {
