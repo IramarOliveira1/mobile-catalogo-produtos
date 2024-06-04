@@ -1,6 +1,5 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.product;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
@@ -39,6 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -233,15 +232,20 @@ public class CreateOrUpdateProductFragment extends Fragment {
                 editTexts.add(description);
                 currencyEditTexts.add(price);
 
-                boolean verify = generic.empty(editTexts, null, null);
+                boolean verify = generic.empty(editTexts, null, currencyEditTexts);
 
-                if (!isActiveEmpty) {
-                    Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo Admin", Toast.LENGTH_SHORT).show();
+                if (!isActiveEmpty && !verify) {
+                    Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo ativo", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (!categoryProductEmpty) {
-                    Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo Categoria", Toast.LENGTH_SHORT).show();
+                if (!categoryProductEmpty && !verify) {
+                    Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo categoria", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (imageUris.isEmpty() && !verify){
+                    Toast.makeText(getActivity(), "Por favor, selecione pelo o menos uma imagem.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -450,32 +454,9 @@ public class CreateOrUpdateProductFragment extends Fragment {
         });
     }
 
-
-//    public String downloadImageNew(String filename, String downloadUrlOfImage) {
-//        try {
-//            DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-//            Uri downloadUri = Uri.parse(downloadUrlOfImage);
-//            DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-//            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
-//                    .setAllowedOverRoaming(false)
-//                    .setTitle(filename)
-//                    .setMimeType("image/png") // Your file type. You can use this code to download other file types also.
-//                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-//                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, java.io.File.separator + filename + ".png");
-//            dm.enqueue(request);
-//
-//            System.out.println(downloadUri);
-//
-//            return getRealPathFromUri(requireContext(), downloadUri);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e.getMessage());
-//        }
-//    }
-
     public void update() {
         ProductRequestDTO productRequestDTO = new ProductRequestDTO();
         Category category = new Category();
-        File file = new File();
 
         productRequestDTO.setName(name.getText().toString());
         productRequestDTO.setDescription(description.getText().toString());
@@ -488,44 +469,45 @@ public class CreateOrUpdateProductFragment extends Fragment {
         List<File> urls = new ArrayList<>();
         for (Uri uri : imageUris) {
             if (Objects.requireNonNull(uri.getPath()).contains("/public")) {
+                File file = new File();
                 file.setUrl(uri.getPath().substring(1));
                 urls.add(file);
+
+                productRequestDTO.setUrls(urls);
             } else {
                 parts.add(prepareFilePart(requireContext(), "images", uri, getRealPathFromUri(requireContext(), uri)));
             }
         }
 
-        System.out.println(urls.size());
+        productService.update(this.productResponseDTO.getId(), productRequestDTO, parts).enqueue(new Callback<MessageResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
+                if (response.isSuccessful()) {
+                    MessageResponse messageResponse = response.body();
 
-//        productService.update(this.productResponseDTO.getId(), productRequestDTO, parts, urls).enqueue(new Callback<MessageResponse>() {
-//            @Override
-//            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
-//                if (response.isSuccessful()) {
-//                    MessageResponse messageResponse = response.body();
-//
-//                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
-//
-//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
-//                } else {
-//                    try {
-//                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
-//                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//
-//                progressBar.setVisibility(View.GONE);
-//                saveProduct.setEnabled(true);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
-//                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
-//                progressBar.setVisibility(View.GONE);
-//                saveProduct.setEnabled(true);
-//            }
-//        });
+                    Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ProductFragment()).addToBackStack(null).commit();
+                } else {
+                    try {
+                        MessageResponse messageResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
+                        Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                progressBar.setVisibility(View.GONE);
+                saveProduct.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(Call<MessageResponse> call, Throwable throwable) {
+                Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                saveProduct.setEnabled(true);
+            }
+        });
     }
 }
 

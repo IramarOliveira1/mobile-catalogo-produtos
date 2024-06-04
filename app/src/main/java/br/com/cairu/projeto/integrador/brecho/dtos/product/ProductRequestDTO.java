@@ -3,6 +3,7 @@ package br.com.cairu.projeto.integrador.brecho.dtos.product;
 import android.net.Uri;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.Category;
@@ -14,6 +15,7 @@ public class ProductRequestDTO {
     private String price;
     private boolean isActive;
     private Category category;
+    private List<File> urls;
 
     public String getName() {
         return name;
@@ -53,5 +55,13 @@ public class ProductRequestDTO {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<File> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<File> urls) {
+        this.urls = urls;
     }
 }

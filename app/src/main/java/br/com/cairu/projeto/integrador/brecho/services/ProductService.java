@@ -1,7 +1,5 @@
 package br.com.cairu.projeto.integrador.brecho.services;
 
-import android.net.Uri;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
-import br.com.cairu.projeto.integrador.brecho.dtos.user.UserResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.File;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -39,7 +36,7 @@ public interface ProductService {
 
     @Multipart
     @PUT("/product/{id}")
-    Call<MessageResponse> update(@Path("id") Long id, @Part("data") ProductRequestDTO data, @Part ArrayList<MultipartBody.Part> images, @Part("urls") List<File> urls);
+    Call<MessageResponse> update(@Path("id") Long id, @Part("data") ProductRequestDTO data, @Part ArrayList<MultipartBody.Part> images);
 
     @GET("/product/{id}")
     Call<ProductResponseDTO> index(@Path("id") Long id, @Query("detail") String detail);
