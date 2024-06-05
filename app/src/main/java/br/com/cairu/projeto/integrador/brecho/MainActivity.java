@@ -1,6 +1,7 @@
 package br.com.cairu.projeto.integrador.brecho;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -39,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         frameLayout = findViewById(R.id.frameLayout);
+
+        if (!generic.getIsAdmin()) {
+            Menu menu = bottomNavigationView.getMenu();
+            MenuItem menuItem = menu.findItem(R.id.user);
+            menuItem.setVisible(false);
+        }
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

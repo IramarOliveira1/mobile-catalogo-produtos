@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,11 +60,9 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     private ProgressBar progressBar;
     private List<ProductResponseDTO> itemList;
     private List<CategoryResponseDTO> itemListCategory;
-    private List<CategoryResponseDTO> categories;
     private TextView categoryEmpty;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Generic generic;
-
     private EditText search;
 
     public CatalogFragment() {
@@ -90,8 +89,6 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
         generic = new Generic(requireContext());
 
         itemList = new ArrayList<>();
-
-        categories = new ArrayList<>();
 
         itemListCategory = new ArrayList<>();
 
@@ -155,6 +152,11 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
 
         if (generic.getToken() != null) {
             inflater.inflate(R.menu.menu_catalog_logged, popup.getMenu());
+
+            if (!generic.getIsAdmin()) {
+                MenuItem menuItem = popup.getMenu().findItem(R.id.user_menu);
+                menuItem.setVisible(false);
+            }
         } else {
             inflater.inflate(R.menu.menu_catalog_not_logged, popup.getMenu());
         }
@@ -227,12 +229,12 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
                 itemListCategory.addAll(response.body().getCategories());
                 filterCategoryAdapter.notifyDataSetChanged();
 
-                CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
+                categoryEmpty.setVisibility(View.GONE);
 
-                categoryResponseDTO.setId(0L);
-                categoryResponseDTO.setName("Selecione");
-                categories.add(categoryResponseDTO);
-                categories.addAll(response.body().getCategories());
+                if (itemList.isEmpty()) {
+                    categoryEmpty.setText("Nenhum produto encontrado.");
+                    categoryEmpty.setVisibility(View.VISIBLE);
+                }
 
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
@@ -251,7 +253,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
         productService.filterPerCategory(id, "catalog").enqueue(new Callback<List<ProductResponseDTO>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<ProductResponseDTO>> call, Response<List<ProductResponseDTO>> response) {
+            public void onResponse(@NonNull Call<List<ProductResponseDTO>> call, @NonNull Response<List<ProductResponseDTO>> response) {
                 itemList.clear();
                 itemList.addAll(response.body());
                 productAdapter.notifyDataSetChanged();
@@ -263,7 +265,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
             }
 
             @Override
-            public void onFailure(Call<List<ProductResponseDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<ProductResponseDTO>> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
@@ -273,7 +275,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
     public void index(Long id) {
         productService.index(id, "detail").enqueue(new Callback<ProductResponseDTO>() {
             @Override
-            public void onResponse(Call<ProductResponseDTO> call, Response<ProductResponseDTO> response) {
+            public void onResponse(@NonNull Call<ProductResponseDTO> call, @NonNull Response<ProductResponseDTO> response) {
                 if (response.isSuccessful()) {
                     search.setText("");
 
@@ -282,7 +284,7 @@ public class CatalogFragment extends Fragment implements ProductAdapter.OnItemDe
             }
 
             @Override
-            public void onFailure(Call<ProductResponseDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<ProductResponseDTO> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });

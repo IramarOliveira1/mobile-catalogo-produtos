@@ -22,6 +22,7 @@ public class Generic {
     private static final String TOKEN_KEY = "jwt_token";
     private static final String USERNAME_KEY = "userName";
     private static final String USERID_KEY = "userId";
+    private static final String ISADMIN_KEY = "isAdmin";
 
     public Generic(Context context) {
         sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
@@ -62,6 +63,17 @@ public class Generic {
     public Long getUserId() {
         return sharedPreferences.getLong(USERID_KEY, 0L);
     }
+
+    public void setIsAdmin(boolean isAdmin) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(ISADMIN_KEY, isAdmin);
+        editor.apply();
+    }
+
+    public Boolean getIsAdmin() {
+        return sharedPreferences.getBoolean(ISADMIN_KEY, false);
+    }
+
 
     public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts, @Nullable ArrayList<CurrencyEditText> currencyEditTexts) {
         boolean validate = false;

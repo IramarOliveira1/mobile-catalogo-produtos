@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,20 +126,21 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<HomeResponseDTO>>() {
             @Override
             public void onResponse(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Response<List<HomeResponseDTO>> response) {
-                if (response.isSuccessful()) {
                     List<HomeResponseDTO> homeResponseDTO = response.body();
+                    System.out.println(homeResponseDTO);
+                if (response.isSuccessful()) {
 
-                    homeAdapter = new HomeAdapter(homeResponseDTO);
-
-                    recyclerView.setAdapter(homeAdapter);
-
-                    TextView totalProduct = view.findViewById(R.id.quantityProduct);
-                    totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
-
-                    TextView totalCategory = view.findViewById(R.id.quantityCategory);
-                    totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
-
-                    progressBar.setVisibility(View.GONE);
+//                    homeAdapter = new HomeAdapter(homeResponseDTO);
+//
+//                    recyclerView.setAdapter(homeAdapter);
+//
+//                    TextView totalProduct = view.findViewById(R.id.quantityProduct);
+//                    totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
+//
+//                    TextView totalCategory = view.findViewById(R.id.quantityCategory);
+//                    totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
+//
+//                    progressBar.setVisibility(View.GONE);
                 }
 
                 if (response.code() == 403) {
@@ -157,6 +159,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Throwable throwable) {
+                System.out.println(throwable.getMessage());
+
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }

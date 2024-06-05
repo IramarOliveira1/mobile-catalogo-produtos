@@ -165,7 +165,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
     public void index(Long id) {
         categoryService.index(id).enqueue(new Callback<CategoryResponseDTO>() {
             @Override
-            public void onResponse(Call<CategoryResponseDTO> call, Response<CategoryResponseDTO> response) {
+            public void onResponse(@NonNull Call<CategoryResponseDTO> call, @NonNull Response<CategoryResponseDTO> response) {
                 if (response.isSuccessful()) {
                     CategoryResponseDTO categoryResponseDTO = response.body();
 
@@ -177,7 +177,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
             }
 
             @Override
-            public void onFailure(Call<CategoryResponseDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<CategoryResponseDTO> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });

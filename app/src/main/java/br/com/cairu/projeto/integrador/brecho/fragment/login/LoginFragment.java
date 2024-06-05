@@ -114,6 +114,7 @@ public class LoginFragment extends Fragment {
                     generic.saveToken(loginResponseDTO.getToken());
                     generic.saveUsername(loginResponseDTO.getName());
                     generic.setUserId(loginResponseDTO.getId());
+                    generic.setIsAdmin(loginResponseDTO.isAdmin());
 
                     Menu menu = bottomNavigationView.getMenu();
                     MenuItem menuItem = menu.findItem(R.id.user);
