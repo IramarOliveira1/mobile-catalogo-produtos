@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -33,7 +35,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void onItemClick(String category, int position);
     }
 
-    private final List<ProductResponseDTO> list;
+    private List<ProductResponseDTO> list;
     private final List<ProductResponseDTO> listName;
     private final OnItemDeleteListener listener;
 

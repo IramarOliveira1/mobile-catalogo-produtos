@@ -17,16 +17,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,8 +39,6 @@ import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
-import br.com.cairu.projeto.integrador.brecho.models.Category;
-import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
 import br.com.cairu.projeto.integrador.brecho.services.ProductService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
@@ -59,7 +55,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<CategoryResponseDTO> itemListCategory;
     private List<CategoryResponseDTO> categories;
     private TextView categoryEmpty;
-    private  TextView notFound;
+    private TextView notFound;
 
     public ProductFragment() {
     }
@@ -69,6 +65,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         return inflater.inflate(R.layout.fragment_product, container, false);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -116,9 +113,9 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             }
         });
 
-        all();
         recyclerViewFilterCategory(view);
         createOrUpdate(view);
+        all();
     }
 
     public void recyclerViewFilterCategory(View view) {
@@ -137,6 +134,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             @Override
             public void onResponse(@NonNull Call<ProductAndCategory> call, @NonNull Response<ProductAndCategory> response) {
                 if (response.isSuccessful()) {
+
                     itemList.clear();
                     itemList.addAll(response.body().getProducts());
                     productAdapter.notifyDataSetChanged();
@@ -150,12 +148,13 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
                     CategoryResponseDTO categoryResponseDTO = new CategoryResponseDTO();
 
+                    categories.clear();
                     categoryResponseDTO.setId(0L);
                     categoryResponseDTO.setName("Selecione");
                     categories.add(categoryResponseDTO);
                     categories.addAll(response.body().getCategories());
 
-                    if (response.body().getProducts().isEmpty()){
+                    if (response.body().getProducts().isEmpty()) {
                         notFound.setText("Nenhum produto encontrado.");
                         notFound.setVisibility(View.VISIBLE);
                     }
@@ -196,6 +195,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
                 if (response.body().isEmpty()) {
                     categoryEmpty.setText("Nenhum produto encontrado para essa categoria.");
                     categoryEmpty.setVisibility(View.VISIBLE);
+                    notFound.setVisibility(View.GONE);
                 }
             }
 
@@ -227,7 +227,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
                     itemList.remove(position);
                     productAdapter.notifyItemRemoved(position);
 
-                    if (itemList.isEmpty()){
+                    if (itemList.isEmpty()) {
                         notFound.setText("Nenhum produto encontrado.");
                         notFound.setVisibility(View.VISIBLE);
                     }
@@ -255,7 +255,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             @Override
             public void onResponse(Call<ProductResponseDTO> call, Response<ProductResponseDTO> response) {
                 if (response.isSuccessful()) {
-
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CreateOrUpdateProductFragment(response.body(), true, categories)).addToBackStack(null).commit();
                 }
             }
@@ -312,7 +311,6 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
             this.all();
             return;
         }
-
         this.filterCategory(id);
     }
 }
