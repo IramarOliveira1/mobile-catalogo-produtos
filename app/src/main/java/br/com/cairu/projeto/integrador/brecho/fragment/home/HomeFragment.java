@@ -2,7 +2,6 @@ package br.com.cairu.projeto.integrador.brecho.fragment.home;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.adapter.HomeAdapter;
@@ -120,32 +117,31 @@ public class HomeFragment extends Fragment {
 
         HomeService homeService = new ApiClient().getClient(getActivity()).create(HomeService.class);
 
-        Call<List<HomeResponseDTO>> call = homeService.homeResponseDTO();
+        Call<HomeResponseDTO> call = homeService.homeResponseDTO();
 
         recyclerView = view.findViewById(R.id.recycleViewHome);
-        call.enqueue(new Callback<List<HomeResponseDTO>>() {
+        call.enqueue(new Callback<HomeResponseDTO>() {
             @Override
-            public void onResponse(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Response<List<HomeResponseDTO>> response) {
-                    List<HomeResponseDTO> homeResponseDTO = response.body();
-                    System.out.println(homeResponseDTO);
+            public void onResponse(@NonNull Call<HomeResponseDTO> call, @NonNull Response<HomeResponseDTO> response) {
                 if (response.isSuccessful()) {
 
-//                    homeAdapter = new HomeAdapter(homeResponseDTO);
-//
-//                    recyclerView.setAdapter(homeAdapter);
-//
-//                    TextView totalProduct = view.findViewById(R.id.quantityProduct);
-//                    totalProduct.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalProduct()));
-//
-//                    TextView totalCategory = view.findViewById(R.id.quantityCategory);
-//                    totalCategory.setText(homeResponseDTO.isEmpty() ? "0" : Long.toString(homeResponseDTO.get(0).getTotalCategory()));
-//
-//                    progressBar.setVisibility(View.GONE);
+                    homeAdapter = new HomeAdapter(response.body().getProducts());
+                    recyclerView.setAdapter(homeAdapter);
+                    TextView totalProduct = view.findViewById(R.id.quantityProduct);
+                    totalProduct.setText(Long.toString(response.body().getCounts().getTotalProducts()));
+                    TextView totalCategory = view.findViewById(R.id.quantityCategory);
+                    totalCategory.setText(Long.toString(response.body().getCounts().getTotalCategories()));
+                    progressBar.setVisibility(View.GONE);
+
+                    if (response.body().getProducts().isEmpty()){
+                        TextView notfound = view.findViewById(R.id.notFoundHome);
+                        notfound.setText("Nenhum produto encontrado.");
+                        notfound.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 if (response.code() == 403) {
                     generic.clear();
-
                     if (getActivity() != null) {
                         Toast.makeText(view.getContext(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager()
@@ -158,9 +154,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<HomeResponseDTO>> call, @NonNull Throwable throwable) {
-                System.out.println(throwable.getMessage());
-
+            public void onFailure(@NonNull Call<HomeResponseDTO> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }

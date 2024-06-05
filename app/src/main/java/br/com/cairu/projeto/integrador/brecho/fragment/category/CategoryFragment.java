@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -40,14 +40,11 @@ import retrofit2.Response;
 
 public class CategoryFragment extends Fragment implements CategoryAdapter.OnItemDeleteListener {
 
+    private  TextView notFound;
     private Generic generic;
-
     private ProgressBar progressBar;
-
     private CategoryAdapter categoryAdapter;
-
     private CategoryService categoryService;
-
     private List<CategoryResponseDTO> itemList;
 
     public CategoryFragment() {
@@ -62,6 +59,8 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         generic = new Generic(requireContext());
+
+        notFound = view.findViewById(R.id.notFoundCategory);
 
         itemList = new ArrayList<>();
 
@@ -95,6 +94,11 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
                     itemList.addAll(response.body());
                     categoryAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
+
+                    if (response.body().isEmpty()){
+                        notFound.setText("Nenhuma categoria encontrada.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 if (response.code() == 403) {
@@ -137,15 +141,21 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
     public void delete(Long id, int position) {
         categoryService.delete(id).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 
                     itemList.remove(position);
                     categoryAdapter.notifyItemRemoved(position);
 
+                    if (itemList.isEmpty()){
+                        notFound.setText("Nenhuma categoria encontrada.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
+
                     Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
+
                     try {
                         MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
                         Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();

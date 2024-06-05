@@ -3,6 +3,23 @@ package br.com.cairu.projeto.integrador.brecho.models;
 import java.util.List;
 
 public class Product {
+
+    private Long id;
+
+    private String name;
+
+    private String description;
+
+    private String price;
+
+    private boolean isActive;
+
+    private int countClick;
+
+    private Category category;
+
+    private List<File> files;
+
     public Long getId() {
         return id;
     }
@@ -67,19 +84,4 @@ public class Product {
         this.files = files;
     }
 
-    private Long id;
-
-    private String name;
-
-    private String description;
-
-    private String price;
-
-    private boolean isActive;
-
-    private int countClick;
-
-    private Category category;
-
-    private List<File> files;
 }

@@ -15,6 +15,7 @@ public class ProductResponseDTO {
     private boolean isActive;
     private Category category;
     private ArrayList<File> files;
+    private int countClick;
 
     public Long getId() {
         return id;
@@ -70,5 +71,13 @@ public class ProductResponseDTO {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public int getCountClick() {
+        return countClick;
+    }
+
+    public void setCountClick(int countClick) {
+        this.countClick = countClick;
     }
 }

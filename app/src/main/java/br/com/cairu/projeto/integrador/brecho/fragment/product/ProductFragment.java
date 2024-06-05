@@ -59,6 +59,7 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
     private List<CategoryResponseDTO> itemListCategory;
     private List<CategoryResponseDTO> categories;
     private TextView categoryEmpty;
+    private  TextView notFound;
 
     public ProductFragment() {
     }
@@ -75,6 +76,8 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
         productService = new ApiClient().getClient(getActivity()).create(ProductService.class);
 
         generic = new Generic(requireActivity());
+
+        notFound = view.findViewById(R.id.notFoundProduct);
 
         itemList = new ArrayList<>();
 
@@ -152,6 +155,11 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
                     categories.add(categoryResponseDTO);
                     categories.addAll(response.body().getCategories());
 
+                    if (response.body().getProducts().isEmpty()){
+                        notFound.setText("Nenhum produto encontrado.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
+
                     progressBar.setVisibility(View.GONE);
                 }
 
@@ -218,6 +226,11 @@ public class ProductFragment extends Fragment implements ProductAdapter.OnItemDe
 
                     itemList.remove(position);
                     productAdapter.notifyItemRemoved(position);
+
+                    if (itemList.isEmpty()){
+                        notFound.setText("Nenhum produto encontrado.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
 
                     Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {

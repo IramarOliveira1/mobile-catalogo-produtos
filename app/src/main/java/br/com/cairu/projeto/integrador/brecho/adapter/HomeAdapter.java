@@ -15,12 +15,15 @@ import java.util.List;
 
 import br.com.cairu.projeto.integrador.brecho.R;
 import br.com.cairu.projeto.integrador.brecho.dtos.home.HomeResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductAndCategory;
+import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.models.Product;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
-    private List<HomeResponseDTO> list;
+    private final List<Product> list;
 
-    public HomeAdapter(List<HomeResponseDTO> list) {
+    public HomeAdapter(List<Product> list) {
         this.list = list;
     }
 
@@ -50,12 +53,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HomeResponseDTO item = list.get(position);
+        Product item = list.get(position);
 
-        System.out.println(holder.images);
         holder.nameProduct.setText(item.getName().toUpperCase());
-        holder.countClick.setText(String.valueOf(item.getCountClick() + " clicks"));
-        Picasso.get().load("http://10.0.2.2:8080/" + item.getFile().getUrl()).into(holder.images);
+        holder.countClick.setText(String.valueOf(item.getCountClick() + " click"));
+        Picasso.get().load("http://10.0.2.2:8080/" + item.getFiles().get(0).getUrl()).into(holder.images);
     }
 
     @Override

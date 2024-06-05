@@ -18,10 +18,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public interface OnItemDeleteListener {
         void onUpdateItem(int position);
+
         void onItemDelete(int position);
     }
 
-    private List<CategoryResponseDTO> list;
+    private final List<CategoryResponseDTO> list;
     private final OnItemDeleteListener deleteListener;
 
     public CategoryAdapter(List<CategoryResponseDTO> list, OnItemDeleteListener deleteListener) {
@@ -30,7 +31,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         public TextView nameCategory;
         public ImageButton btnDelete;
         public ImageButton btnUpdate;

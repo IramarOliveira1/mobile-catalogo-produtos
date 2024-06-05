@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -44,6 +45,7 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
     private UserService userService;
     private Generic generic;
     private List<UserResponseDTO> itemList;
+    private TextView notFound;
 
     public UserFragment() {
     }
@@ -58,6 +60,8 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
         generic = new Generic(requireContext());
 
         itemList = new ArrayList<>();
+
+        notFound = view.findViewById(R.id.notFoundUser);
 
         userService = new ApiClient().getClient(getActivity()).create(UserService.class);
 
@@ -89,6 +93,11 @@ public class UserFragment extends Fragment implements UserAdapter.OnItemDeleteLi
                     itemList.addAll(response.body());
                     userAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
+
+                    if (response.body().isEmpty()){
+                        notFound.setText("Nenhum usuário encontrado.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 if (response.code() == 403) {

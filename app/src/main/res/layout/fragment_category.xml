@@ -34,6 +34,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/notFoundCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recycleViewCategory"
+            tools:text="Nenhhuma categoria encontrado." />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleViewCategory"
