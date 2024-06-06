@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import br.com.cairu.projeto.integrador.brecho.R;
+import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserRequestDTO;
@@ -114,7 +115,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(),false);
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(), false);
 
         saveUser = view.findViewById(R.id.btnSaveUser);
         inputUserName = view.findViewById(R.id.inputUserName);
@@ -197,7 +198,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         userService.register(userRequestDTO).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 

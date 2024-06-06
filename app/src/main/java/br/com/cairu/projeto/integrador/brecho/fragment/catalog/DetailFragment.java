@@ -11,18 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +30,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import br.com.cairu.projeto.integrador.brecho.R;
-import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
-import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.product.ProductResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.models.File;
-import br.com.cairu.projeto.integrador.brecho.services.ProductService;
-import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import br.com.cairu.projeto.integrador.brecho.utils.InitToolbar;
 
 public class DetailFragment extends Fragment {

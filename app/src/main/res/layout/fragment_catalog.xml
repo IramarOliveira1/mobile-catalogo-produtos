@@ -32,7 +32,7 @@
 
                 <EditText
                     android:id="@+id/searchProductCatalog"
-                    android:layout_width="260dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/search_catalog"
                     android:hint="Pesquisar produtos na loja"

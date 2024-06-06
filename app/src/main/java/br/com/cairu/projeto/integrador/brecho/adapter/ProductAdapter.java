@@ -1,6 +1,10 @@
 package br.com.cairu.projeto.integrador.brecho.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -38,7 +40,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private List<ProductResponseDTO> list;
     private final List<ProductResponseDTO> listName;
     private final OnItemDeleteListener listener;
-
     private final boolean catalog;
 
     public ProductAdapter(List<ProductResponseDTO> list, OnItemDeleteListener listener, boolean catalog) {
@@ -69,7 +70,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.btnDelete.setId(item.getId().intValue());
         holder.btnUpdate.setId(item.getId().intValue());
 
-        Picasso.get().load("http://10.0.2.2:8080/" + item.getFiles().get(0).getUrl()).into(holder.images);
+        Picasso.get().load(com.denzcoskun.imageslider.R.drawable.default_loading).into(holder.images);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.get()
+                        .load("http://10.0.2.2:8080/" + item.getFiles().get(0).getUrl())
+                        .into(holder.images);
+            }
+        }, 800);
     }
 
     @Override
