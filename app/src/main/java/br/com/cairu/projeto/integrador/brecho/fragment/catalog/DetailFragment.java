@@ -96,33 +96,16 @@ public class DetailFragment extends Fragment {
 
     @SuppressLint("QueryPermissionsNeeded")
     private void openWhatsAppWithMessage(String message) {
-        PackageManager packageManager = requireActivity().getPackageManager();
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
         try {
-            String url = "https://api.whatsapp.com/send?phone=5571991106181&text=Olá gostaria de mais informações sobre essa roupa -" + Uri.encode(message);
+            String url = "https://api.whatsapp.com/send?phone=5571991106181&text=Olá gostaria de mais informações sobre essa roupa - " + Uri.encode(message);
             intent.setPackage("com.whatsapp");
             intent.setData(Uri.parse(url));
+            startActivity(intent);
 
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(getActivity(), "WhatsApp não está instalado. você será direcionado para playstore", Toast.LENGTH_SHORT).show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.whatsapp"));
-                        if (playStoreIntent.resolveActivity(packageManager) != null) {
-                            startActivity(playStoreIntent);
-                        } else {
-                            playStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.whatsapp"));
-                            startActivity(playStoreIntent);
-                        }
-                    }
-                }, 2000);
-            }
         } catch (Exception e) {
-            Toast.makeText(getActivity(), "Ocorreu um erro.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Ocorreu um erro, não conseguimos encontrar o whatsapp no celular, por favor verificar se estar instalado.", Toast.LENGTH_SHORT).show();
         }
     }
 

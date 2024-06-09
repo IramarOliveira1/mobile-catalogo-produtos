@@ -1,8 +1,12 @@
 package br.com.cairu.projeto.integrador.brecho;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -44,6 +48,23 @@ public class MainActivity extends AppCompatActivity {
             Menu menu = bottomNavigationView.getMenu();
             MenuItem menuItem = menu.findItem(R.id.user);
             menuItem.setVisible(false);
+        }
+
+        Window window = getWindow();
+        View decorView = window.getDecorView();
+        WindowInsetsController insetsController = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            insetsController = decorView.getWindowInsetsController();
+        }
+
+        if (insetsController != null) {
+            // Ensure light status bar (dark icons)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                insetsController.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
         }
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
