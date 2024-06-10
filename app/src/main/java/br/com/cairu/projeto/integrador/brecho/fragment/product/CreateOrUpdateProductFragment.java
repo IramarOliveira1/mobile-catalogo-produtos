@@ -37,7 +37,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -195,7 +194,7 @@ public class CreateOrUpdateProductFragment extends Fragment {
             }
 
             for (File file : this.productResponseDTO.getFiles()) {
-                Uri imageUri = Uri.parse("http://10.0.2.2:8080/" + file.getUrl());
+                Uri imageUri = Uri.parse("http://10.6.18.136:8080/" + file.getUrl());
                 imageUris.add(imageUri);
 
                 Picasso.get().load(imageUris.get(0)).into(imageOne);

@@ -1,9 +1,6 @@
 package br.com.cairu.projeto.integrador.brecho.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             @Override
             public void run() {
                 Picasso.get()
-                        .load("http://10.0.2.2:8080/" + item.getFiles().get(0).getUrl())
+                        .load("http://10.6.18.136:8080/" + item.getFiles().get(0).getUrl())
                         .into(holder.images);
             }
         }, 800);

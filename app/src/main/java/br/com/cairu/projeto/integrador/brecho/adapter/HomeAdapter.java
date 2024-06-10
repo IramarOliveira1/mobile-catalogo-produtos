@@ -57,7 +57,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         holder.nameProduct.setText(item.getName().toUpperCase());
         holder.countClick.setText(String.valueOf(item.getCountClick() + " click"));
-        Picasso.get().load("http://10.0.2.2:8080/" + item.getFiles().get(0).getUrl()).into(holder.images);
+        Picasso.get().load("http://10.6.18.136:8080/" + item.getFiles().get(0).getUrl()).into(holder.images);
     }
 
     @Override

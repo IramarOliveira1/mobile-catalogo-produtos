@@ -67,7 +67,7 @@
             android:hint="email@email.com"
             android:inputType="textEmailAddress"
             android:padding="16dp"
-            android:text="testando@teste.com" />
+            android:text="josys@brecho.com" />
 
         <TextView
             android:id="@+id/passwordLogin"

@@ -2,7 +2,6 @@ package br.com.cairu.projeto.integrador.brecho.fragment.catalog;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +62,7 @@ public class DetailFragment extends Fragment {
         ArrayList<SlideModel> images = new ArrayList<>();
 
         for (File file : productResponseDTO.getFiles()) {
-            images.add(new SlideModel("http://10.0.2.2:8080/" + file.getUrl(), ScaleTypes.CENTER_CROP));
+            images.add(new SlideModel("http://10.6.18.136:8080/" + file.getUrl(), ScaleTypes.CENTER_CROP));
         }
 
         ImageSlider imageSlider = view.findViewById(R.id.image_slider);
