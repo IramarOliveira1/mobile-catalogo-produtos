@@ -54,4 +54,11 @@ dependencies {
 
     //mask
     implementation(libs.maskara)
+    implementation(libs.mask)
+
+    //carousel
+    implementation(libs.carousel)
+
+    //swiperefreshlayout
+    implementation(libs.swiperefreshlayout)
 }

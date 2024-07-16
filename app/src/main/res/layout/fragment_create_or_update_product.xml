@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragment.user.CreateOrUpdateUserFragment">
+    tools:context=".fragment.product.CreateOrUpdateProductFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,11 +29,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/titleUserToolbar"
+                        android:id="@+id/titleProductToolbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="Criar Usuário"
+                        android:text="Criar Produto"
                         android:textColor="#fff" />
 
                 </androidx.appcompat.widget.Toolbar>
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
                 <TextView
-                    android:id="@+id/labelNameUser"
+                    android:id="@+id/labelNameProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -62,7 +62,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/inputUserName"
+                    android:id="@+id/inputProductName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -73,81 +73,58 @@
                     tools:text="Josy" />
 
                 <TextView
-                    android:id="@+id/labelEmailUser"
+                    android:id="@+id/labelDescriptionProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="E-mail"
+                    android:text="Descrição"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/inputUserEmail"
+                    android:id="@+id/inputProductDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_input"
-                    android:inputType="textEmailAddress"
+                    android:background="@drawable/bg_textarea"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:lines="15"
+                    android:maxLines="15"
                     android:padding="16dp"
                     tools:text="Josy@brecho.com" />
 
                 <TextView
-                    android:id="@+id/labelCpfUser"
+                    android:id="@+id/labelPriceProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="CPF"
+                    android:text="Preço"
                     android:textStyle="bold" />
 
 
-                <com.santalu.maskara.widget.MaskEditText
-                    android:id="@+id/inputUserCpf"
+                <com.blackcat.currencyedittext.CurrencyEditText
+                    android:id="@+id/inputProductPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
-                    android:inputType="number"
-                    android:padding="16dp"
-                    app:mask="___.___.___-__"
-                    app:maskCharacter="_"
-                    app:maskStyle="completable"
-                    tools:text="000.000.000-00" />
-
+                    android:padding="16dp" />
 
                 <TextView
-                    android:id="@+id/labelPasswordUser"
+                    android:id="@+id/labelActiveProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Senha"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/inputUserPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_input"
-                    android:inputType="textPassword"
-                    android:padding="16dp"
-                    tools:text="00000000" />
-
-                <TextView
-                    android:id="@+id/labelAdminUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="Admin"
+                    android:text="Ativo"
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/inputUserIsAdmin"
+                    android:id="@+id/inputProductIsActive"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -157,28 +134,112 @@
                     android:padding="16dp" />
 
                 <TextView
-                    android:id="@+id/labelPhoneUser"
+                    android:id="@+id/labelCategoryProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Telefone"
+                    android:text="Categoria"
                     android:textStyle="bold" />
 
-
-                <com.santalu.maskara.widget.MaskEditText
-                    android:id="@+id/inputUserPhone"
+                <Spinner
+                    android:id="@+id/inputCategoryProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_input"
-                    android:inputType="number"
-                    android:padding="16dp"
-                    app:mask="(__) _____-____"
-                    app:maskCharacter="_"
-                    app:maskStyle="completable"
-                    tools:text="(99) 99999-9999" />
+                    android:inputType="text"
+                    android:padding="16dp" />
+
+                <Button
+                    android:id="@+id/buttonSelectImages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="#ffe3a2"
+                    android:text="Selecionar Imagens"
+                    android:textColor="#000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageOne"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/deleteImageOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@drawable/bg_btn_delete"
+                        android:padding="8dp"
+                        android:src="@drawable/delete_bin_line"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageTwo"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/deleteImageTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@drawable/bg_btn_delete"
+                        android:padding="8dp"
+                        android:src="@drawable/delete_bin_line"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageThree"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/deleteImageThree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:background="@drawable/bg_btn_delete"
+                        android:padding="8dp"
+                        android:src="@drawable/delete_bin_line"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
 
                 <ProgressBar
@@ -191,10 +252,10 @@
                     android:indeterminateDrawable="@drawable/bg_progress_bar"
                     android:progress="0"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/btnSaveUser" />
+                    app:layout_constraintBottom_toTopOf="@+id/btnSaveProduct" />
 
                 <Button
-                    android:id="@+id/btnSaveUser"
+                    android:id="@+id/btnSaveProduct"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="20dp"

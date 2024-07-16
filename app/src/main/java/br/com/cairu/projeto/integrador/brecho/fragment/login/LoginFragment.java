@@ -1,9 +1,12 @@
 package br.com.cairu.projeto.integrador.brecho.fragment.login;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -27,9 +30,11 @@ import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginRequestDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.login.LoginResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.fragment.catalog.CatalogFragment;
 import br.com.cairu.projeto.integrador.brecho.fragment.home.HomeFragment;
 import br.com.cairu.projeto.integrador.brecho.services.LoginService;
 import br.com.cairu.projeto.integrador.brecho.utils.Generic;
+import br.com.cairu.projeto.integrador.brecho.utils.InitToolbar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +45,6 @@ public class LoginFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Button buttonLogin;
     private Generic generic;
-
     private ProgressBar progressBar;
 
     public LoginFragment() {
@@ -60,13 +64,20 @@ public class LoginFragment extends Fragment {
 
         generic = new Generic(requireContext());
 
-        System.out.println(generic);
-
         buttonLogin = view.findViewById(R.id.buttonLogin);
         email = view.findViewById(R.id.editEmail);
         password = view.findViewById(R.id.editPassword);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         progressBar = view.findViewById(R.id.progressBar);
+
+        Button buttonBack = view.findViewById(R.id.buttonBack);
+
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFrament(new CatalogFragment(), false);
+            }
+        });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +88,7 @@ public class LoginFragment extends Fragment {
                 editTexts.add(email);
                 editTexts.add(password);
 
-                boolean verify = generic.empty(editTexts, null);
+                boolean verify = generic.empty(editTexts, null, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);
@@ -96,12 +107,14 @@ public class LoginFragment extends Fragment {
         Call<LoginResponseDTO> call = loginService.login(loginRequest);
         call.enqueue(new Callback<LoginResponseDTO>() {
             @Override
-            public void onResponse(Call<LoginResponseDTO> call, Response<LoginResponseDTO> response) {
+            public void onResponse(@NonNull Call<LoginResponseDTO> call, @NonNull Response<LoginResponseDTO> response) {
                 if (response.isSuccessful()) {
                     LoginResponseDTO loginResponseDTO = response.body();
 
                     generic.saveToken(loginResponseDTO.getToken());
                     generic.saveUsername(loginResponseDTO.getName());
+                    generic.setUserId(loginResponseDTO.getId());
+                    generic.setIsAdmin(loginResponseDTO.isAdmin());
 
                     Menu menu = bottomNavigationView.getMenu();
                     MenuItem menuItem = menu.findItem(R.id.user);
@@ -112,7 +125,7 @@ public class LoginFragment extends Fragment {
                         menuItem.setVisible(false);
                     }
 
-                    changeFrament();
+                    changeFrament(new HomeFragment(), true);
                 } else {
                     try {
                         MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
@@ -134,12 +147,15 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void changeFrament() {
+    public void changeFrament(Fragment fragment, boolean home) {
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, new HomeFragment())
+                .replace(R.id.frameLayout, fragment)
                 .addToBackStack(null)
                 .commit();
 
-        bottomNavigationView.setVisibility(View.VISIBLE);
+        if (home) {
+            bottomNavigationView.setSelectedItemId(R.id.home);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 }

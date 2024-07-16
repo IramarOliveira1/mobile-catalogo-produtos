@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,7 +30,9 @@ import br.com.cairu.projeto.integrador.brecho.adapter.CategoryAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
+import br.com.cairu.projeto.integrador.brecho.fragment.login.LoginFragment;
 import br.com.cairu.projeto.integrador.brecho.services.CategoryService;
+import br.com.cairu.projeto.integrador.brecho.utils.Generic;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,12 +40,11 @@ import retrofit2.Response;
 
 public class CategoryFragment extends Fragment implements CategoryAdapter.OnItemDeleteListener {
 
+    private  TextView notFound;
+    private Generic generic;
     private ProgressBar progressBar;
-
     private CategoryAdapter categoryAdapter;
-
     private CategoryService categoryService;
-
     private List<CategoryResponseDTO> itemList;
 
     public CategoryFragment() {
@@ -50,10 +52,15 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_category, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycleViewCategory);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        generic = new Generic(requireContext());
+
+        notFound = view.findViewById(R.id.notFoundCategory);
 
         itemList = new ArrayList<>();
 
@@ -80,12 +87,31 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
         categoryService.all().enqueue(new Callback<List<CategoryResponseDTO>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<CategoryResponseDTO>> call, Response<List<CategoryResponseDTO>> response) {
-                List<CategoryResponseDTO> categoryResponseDTO = response.body();
-                itemList.clear();
-                itemList.addAll(response.body());
-                categoryAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+            public void onResponse(@NonNull Call<List<CategoryResponseDTO>> call, @NonNull Response<List<CategoryResponseDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<CategoryResponseDTO> categoryResponseDTO = response.body();
+                    itemList.clear();
+                    itemList.addAll(response.body());
+                    categoryAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+
+                    if (response.body().isEmpty()){
+                        notFound.setText("Nenhuma categoria encontrada.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                if (response.code() == 403) {
+                    generic.clear();
+                    if (getActivity() != null) {
+                        Toast.makeText(getActivity(), "Token expirado faça login novamente.", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, new LoginFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
             }
 
             @Override
@@ -115,15 +141,21 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
     public void delete(Long id, int position) {
         categoryService.delete(id).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 
                     itemList.remove(position);
                     categoryAdapter.notifyItemRemoved(position);
 
+                    if (itemList.isEmpty()){
+                        notFound.setText("Nenhuma categoria encontrada.");
+                        notFound.setVisibility(View.VISIBLE);
+                    }
+
                     Toast.makeText(getActivity(), messageResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
+
                     try {
                         MessageResponse errorResponse = new Gson().fromJson(response.errorBody().string(), MessageResponse.class);
                         Toast.makeText(getActivity(), errorResponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -143,7 +175,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
     public void index(Long id) {
         categoryService.index(id).enqueue(new Callback<CategoryResponseDTO>() {
             @Override
-            public void onResponse(Call<CategoryResponseDTO> call, Response<CategoryResponseDTO> response) {
+            public void onResponse(@NonNull Call<CategoryResponseDTO> call, @NonNull Response<CategoryResponseDTO> response) {
                 if (response.isSuccessful()) {
                     CategoryResponseDTO categoryResponseDTO = response.body();
 
@@ -155,7 +187,7 @@ public class CategoryFragment extends Fragment implements CategoryAdapter.OnItem
             }
 
             @Override
-            public void onFailure(Call<CategoryResponseDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<CategoryResponseDTO> call, @NonNull Throwable throwable) {
                 Toast.makeText(getActivity(), "Network error.", Toast.LENGTH_SHORT).show();
             }
         });

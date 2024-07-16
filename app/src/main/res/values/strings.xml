@@ -5,10 +5,11 @@
     <string name="menu_product">Produto</string>
     <string name="menu_category">Categoria</string>
     <string name="menu_user">Usuário</string>
+    <string name="menu_login">Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string-array name="isAdmin">
+    <string-array name="trueOrFalse">
         <item>Selecione</item>
         <item>Sim</item>
         <item>Não</item>

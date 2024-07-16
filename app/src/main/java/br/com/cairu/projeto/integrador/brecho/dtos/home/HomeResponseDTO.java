@@ -1,56 +1,28 @@
 package br.com.cairu.projeto.integrador.brecho.dtos.home;
 
-import br.com.cairu.projeto.integrador.brecho.models.File;
+import java.util.List;
+
+import br.com.cairu.projeto.integrador.brecho.models.Product;
 
 public class HomeResponseDTO {
 
-    private String name;
+    private List<Product> products;
 
-    private int countClick;
+    private TotalCountsDTO counts;
 
-    private File file;
-
-    private Long totalProduct;
-
-    private Long totalCategory;
-
-    public String getName() {
-        return name;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
-    public int getCountClick() {
-        return countClick;
+    public TotalCountsDTO getCounts() {
+        return counts;
     }
 
-    public void setCountClick(int countClick) {
-        this.countClick = countClick;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public Long getTotalProduct() {
-        return totalProduct;
-    }
-
-    public void setTotalProduct(Long totalProduct) {
-        this.totalProduct = totalProduct;
-    }
-
-    public Long getTotalCategory() {
-        return totalCategory;
-    }
-
-    public void setTotalCategory(Long totalCategory) {
-        this.totalCategory = totalCategory;
+    public void setCounts(TotalCountsDTO counts) {
+        this.counts = counts;
     }
 }

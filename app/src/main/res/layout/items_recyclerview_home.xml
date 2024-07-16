@@ -11,14 +11,15 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/nameProductHome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="#000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,5 +37,4 @@
         app:layout_constraintEnd_toEndOf="@+id/nameProductHome"
         app:layout_constraintStart_toStartOf="@+id/nameProductHome"
         tools:text="130 clicks" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

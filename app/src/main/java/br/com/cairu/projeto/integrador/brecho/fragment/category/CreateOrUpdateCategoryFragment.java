@@ -56,7 +56,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_or_update, container, false);
+        return inflater.inflate(R.layout.fragment_create_or_update_category, container, false);
     }
 
     @Override
@@ -67,14 +67,14 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(),false);
 
         saveCategory = view.findViewById(R.id.btnSaveCategory);
         inputCategoryName = view.findViewById(R.id.inputCategoryName);
         TextView titleCategory = view.findViewById(R.id.titleCategory);
 
         progressBar = view.findViewById(R.id.progressBar);
-        generic = new Generic(getActivity());
+        generic = new Generic(requireContext());
 
         if (this.isUpdate) {
             inputCategoryName.setText(this.categoryResponseDTO.getName());
@@ -89,7 +89,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
 
                 editTexts.add(inputCategoryName);
 
-                boolean verify = generic.empty(editTexts, null);
+                boolean verify = generic.empty(editTexts, null, null);
 
                 if (!verify) {
                     progressBar.setVisibility(View.VISIBLE);
@@ -139,7 +139,7 @@ public class CreateOrUpdateCategoryFragment extends Fragment {
                 }
 
                 progressBar.setVisibility(View.GONE);
-                saveCategory.setEnabled(false);
+                saveCategory.setEnabled(true);
             }
 
             @Override

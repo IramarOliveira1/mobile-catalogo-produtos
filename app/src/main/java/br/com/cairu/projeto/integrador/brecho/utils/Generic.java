@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.santalu.maskara.widget.MaskEditText;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class Generic {
     private final SharedPreferences sharedPreferences;
     private static final String TOKEN_KEY = "jwt_token";
     private static final String USERNAME_KEY = "userName";
+    private static final String USERID_KEY = "userId";
+    private static final String ISADMIN_KEY = "isAdmin";
 
     public Generic(Context context) {
         sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
@@ -51,7 +54,28 @@ public class Generic {
         return sharedPreferences.getString(USERNAME_KEY, null);
     }
 
-    public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts) {
+    public void setUserId(Long id) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(USERID_KEY, id);
+        editor.apply();
+    }
+
+    public Long getUserId() {
+        return sharedPreferences.getLong(USERID_KEY, 0L);
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(ISADMIN_KEY, isAdmin);
+        editor.apply();
+    }
+
+    public Boolean getIsAdmin() {
+        return sharedPreferences.getBoolean(ISADMIN_KEY, false);
+    }
+
+
+    public boolean empty(ArrayList<EditText> editTexts, @Nullable ArrayList<MaskEditText> maskEditTexts, @Nullable ArrayList<CurrencyEditText> currencyEditTexts) {
         boolean validate = false;
 
         for (EditText editText : editTexts) {
@@ -65,6 +89,14 @@ public class Generic {
             for (MaskEditText maskEditText : maskEditTexts) {
                 if (maskEditText.getText().toString().trim().isEmpty()) {
                     maskEditText.setError("Preencha este campo.");
+                    validate = true;
+                }
+            }
+        }
+        if (currencyEditTexts != null) {
+            for (CurrencyEditText currencyEditText : currencyEditTexts) {
+                if (currencyEditText.getText().toString().trim().isEmpty()) {
+                    currencyEditText.setError("Preencha este campo.");
                     validate = true;
                 }
             }

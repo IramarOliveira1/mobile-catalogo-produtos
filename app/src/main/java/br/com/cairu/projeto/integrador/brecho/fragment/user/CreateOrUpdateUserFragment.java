@@ -26,8 +26,10 @@ import com.santalu.maskara.widget.MaskEditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import br.com.cairu.projeto.integrador.brecho.R;
+import br.com.cairu.projeto.integrador.brecho.adapter.ProductAdapter;
 import br.com.cairu.projeto.integrador.brecho.config.ApiClient;
 import br.com.cairu.projeto.integrador.brecho.dtos.generic.MessageResponse;
 import br.com.cairu.projeto.integrador.brecho.dtos.user.UserRequestDTO;
@@ -75,7 +77,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         adapter = ArrayAdapter.createFromResource(
                 requireContext(),
-                R.array.isAdmin,
+                R.array.trueOrFalse,
                 android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -109,11 +111,11 @@ public class CreateOrUpdateUserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        userService = new ApiClient().getClient(getActivity()).create(UserService.class);
+
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
-        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity());
-
-        userService = new ApiClient().getClient(getActivity()).create(UserService.class);
+        new InitToolbar().toolbar((AppCompatActivity) requireActivity(), toolbar, getActivity(), false);
 
         saveUser = view.findViewById(R.id.btnSaveUser);
         inputUserName = view.findViewById(R.id.inputUserName);
@@ -130,7 +132,6 @@ public class CreateOrUpdateUserFragment extends Fragment {
             inputUserCpf.setText(this.userResponseDTO.getCpf());
             inputUserPhone.setText(this.userResponseDTO.getPhone());
 
-            System.out.println(this.userResponseDTO.isAdmin());
             if (this.userResponseDTO.isAdmin()) {
                 inputUserIsAdmin.setSelection(adapter.getPosition("Sim"));
             } else {
@@ -154,7 +155,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
                 maskEditTexts.add(inputUserPhone);
                 maskEditTexts.add(inputUserCpf);
 
-                boolean verify = generic.empty(editTexts, maskEditTexts);
+                boolean verify = generic.empty(editTexts, maskEditTexts, null);
 
                 if (!isAdminEmpty) {
                     Toast.makeText(getActivity(), "Por favor, selecione uma opção no campo Admin", Toast.LENGTH_SHORT).show();
@@ -197,7 +198,7 @@ public class CreateOrUpdateUserFragment extends Fragment {
 
         userService.register(userRequestDTO).enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if (response.isSuccessful()) {
                     MessageResponse messageResponse = response.body();
 
@@ -238,6 +239,11 @@ public class CreateOrUpdateUserFragment extends Fragment {
         userRequestDTO.setAdmin(isAdmin);
         userRequestDTO.setPassword(inputUserPassword.getText().toString());
         userRequestDTO.setPhone(inputUserPhone.getText().toString());
+
+        if (Objects.equals(this.userResponseDTO.getId(), generic.getUserId())) {
+            generic.saveUsername(inputUserName.getText().toString());
+        }
+
         userService.update(this.userResponseDTO.getId(), userRequestDTO).enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {

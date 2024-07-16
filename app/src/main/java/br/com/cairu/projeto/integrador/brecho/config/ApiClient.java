@@ -14,9 +14,9 @@ public class ApiClient {
                 .addInterceptor(new ApiInterceptor(context))
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
-        
+
         return new Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080")
+            .baseUrl("http://10.6.18.136:8080")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build();

@@ -1,24 +1,21 @@
-package br.com.cairu.projeto.integrador.brecho.models;
+package br.com.cairu.projeto.integrador.brecho.dtos.product;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class Product {
+import br.com.cairu.projeto.integrador.brecho.dtos.category.CategoryResponseDTO;
+import br.com.cairu.projeto.integrador.brecho.models.Category;
+import br.com.cairu.projeto.integrador.brecho.models.File;
+
+public class ProductResponseDTO {
 
     private Long id;
-
     private String name;
-
     private String description;
-
     private String price;
-
     private boolean isActive;
-
-    private int countClick;
-
     private Category category;
-
-    private List<File> files;
+    private ArrayList<File> files;
+    private int countClick;
 
     public Long getId() {
         return id;
@@ -60,12 +57,12 @@ public class Product {
         isActive = active;
     }
 
-    public int getCountClick() {
-        return countClick;
+    public ArrayList<File> getFiles() {
+        return files;
     }
 
-    public void setCountClick(int countClick) {
-        this.countClick = countClick;
+    public void setFiles(ArrayList<File> files) {
+        this.files = files;
     }
 
     public Category getCategory() {
@@ -76,12 +73,11 @@ public class Product {
         this.category = category;
     }
 
-    public List<File> getFiles() {
-        return files;
+    public int getCountClick() {
+        return countClick;
     }
 
-    public void setFiles(List<File> files) {
-        this.files = files;
+    public void setCountClick(int countClick) {
+        this.countClick = countClick;
     }
-
 }

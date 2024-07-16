@@ -18,10 +18,12 @@
 
         <TextView
             android:id="@+id/nameCategory"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="#000"
             android:textSize="12sp"
             tools:text="Testando" />
@@ -29,14 +31,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right">
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btnUpdateCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/bg_btn_update"
                 android:padding="8dp"
                 android:src="@drawable/edit_box_line" />
@@ -49,11 +51,8 @@
                 android:background="@drawable/bg_btn_delete"
                 android:padding="8dp"
                 android:src="@drawable/delete_bin_line" />
-
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
