@@ -22,6 +22,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -37,4 +40,25 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    //picasso
+    implementation(libs.picasso)
+
+    //okhttp
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.logging.interceptor)
+
+    //mask
+    implementation(libs.maskara)
+    implementation(libs.mask)
+
+    //carousel
+    implementation(libs.carousel)
+
+    //swiperefreshlayout
+    implementation(libs.swiperefreshlayout)
 }

@@ -1,12 +1,19 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.2"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+maskara = "1.0.0"
 material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+retrofit = "2.11.0"
+okhttp-bom = "4.12.0"
+picasso = "2.8"
+mask = "2.0.2"
+carousel = "0.1.2"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +23,28 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+
+#Retrofit
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+#Okhttp
+okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp-bom" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-bom" }
+
+#picasso
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+
+#mask
+maskara = { module = "com.github.santalu:maskara", version.ref = "maskara" }
+mask = { module = "com.github.BlacKCaT27:CurrencyEditText", version.ref = "mask" }
+
+#carousel
+carousel = { module = " com.github.denzcoskun:ImageSlideshow", version.ref = "carousel" }
+
+#swiperefreshlayout
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
